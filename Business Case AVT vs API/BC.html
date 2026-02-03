@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIM Validation Solution - AVT vs Revit API Comparison</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Back to presentation button -->
+    <button class="back-to-presentation" onclick="window.close()">
+        <i class="fas fa-arrow-left"></i>
+        <span>Back to Presentation</span>
+    </button>
+    
+    <div class="container">
+        <header>
+            <div class="header-logo">
+                <img src="images/aecom-logo.jpg" alt="AECOM" class="company-logo">
+            </div>
+            <h1>EXECUTIVE BUSINESS CASE: QAQC Checklist BIM</h1>
+            <h2>AVT vs Revit API Internal Tool - Comprehensive Comparison</h2>
+            <div class="metadata">
+                <p><strong>Updated by:</strong> Christian Sarmiento</p>
+                <p><strong>Date:</strong> June 9, 2025</p>
+            </div>
+        </header>
+
+        <!-- Executive Summary Comparison -->
+        <section class="executive-summary">
+            <h2>EXECUTIVE SUMMARY: HEAD-TO-HEAD COMPARISON</h2>
+            <div class="comparison-grid">
+                <div class="solution-card avt-card">
+                    <h3>Autodesk Validation Tool (AVT)</h3>
+                    <!-- <div class="score-circle">59.72%</div> -->
+                    <h4>Coverage Rate</h4>
+                    <ul class="pros">
+                        <li>✅ Web-based Automation</li>
+                        <li>✅ No developer required</li>
+                        <li>✅ No initial setup required</li>
+                        <li>✅ Enterprise support</li>
+                       
+                    </ul>
+                    <ul class="cons">
+                        <li>❌ Token-based pricing</li>
+                        <li>❌ 49 of 71 checks covered</li>
+                        <li>❌ Missing 31% of checks</li>                        
+                        <li>❌ Poor Priority I coverage (57%)</li>
+                        <li>❌ Limited customization</li>
+                    </ul>
+                </div>
+ 
+                <div class="solution-card internal-card">
+                    <h3>Revit API Internal Tool</h3>
+                    <!-- <div class="score-circle">94.44%</div> -->
+                    <h4>Coverage Rate</h4>
+                    <ul class="cons">
+                        <li>❌ No web-based Automation</li>
+                        <li>❌ Developer Required</li>
+                        <li>❌ 2-month initial setup</li>
+                        <li>❌ Limited API Support</li>
+                    </ul>
+                    <ul class="pros">
+                        <li>✅ No token-based pricing</li>
+                        <li>✅ 62 of 71 checks covered</li>
+                        <li>✅ Missing 12.67% of checks</li>                        
+                        <li>✅ Priority I coverage (86%)</li>
+                        <li>✅ Full customization</li>
+                       
+                    </ul>
+                </div>
+            </div>
+        </section>
+        <!-- Updated Visual Comparison -->
+        
+        <!-- Coverage Analysis by Priority -->
+        <section class="coverage-analysis">
+            <h2>VALIDATION COVERAGE ANALYSIS BY PRIORITY</h2>
+ 
+            <!-- Priority Coverage Table -->
+            <div class="coverage-table-container">
+                <table class="priority-coverage-table">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">Priority Level</th>
+                            <th rowspan="2">Total Checks</th>
+                            <th colspan="2">Checks Accomplished</th>
+                            <th colspan="2">Coverage %</th>
+                        </tr>
+                        <tr>
+                            <th class="avt-header">AVT</th>
+                            <th class="revit-header">Revit API</th>
+                            <th class="avt-header">AVT</th>
+                            <th class="revit-header">Revit API</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="priority-i">
+                            <td><strong>Priority I</strong><br><span class="priority-desc">Impacts deliverables or client requirements</span></td>
+                            <td class="total-checks">7</td>
+                            <td class="avt-data">4</td>
+                            <td class="revit-data">6</td>
+                            <td class="avt-data coverage-low">57.14%</td>
+                            <td class="revit-data coverage-high">85.71%</td>
+                        </tr>
+                        <tr class="priority-ii">
+                            <td><strong>Priority II</strong><br><span class="priority-desc">Affects coordination or documentation</span></td>
+                            <td class="total-checks">23</td>
+                            <td class="avt-data">15</td>
+                            <td class="revit-data">20</td>
+                            <td class="avt-data coverage-low">65.22%</td>
+                            <td class="revit-data coverage-high">86.96%</td>
+                        </tr>
+                        <tr class="priority-iii">
+                            <td><strong>Priority III</strong><br><span class="priority-desc">Affects workflow or clarity</span></td>
+                            <td class="total-checks">38</td>
+                            <td class="avt-data">28</td>
+                            <td class="revit-data">34</td>
+                            <td class="avt-data coverage-low">73.68%</td>
+                            <td class="revit-data coverage-high">89.47%</td>
+                        </tr>
+                        <tr class="priority-iv">
+                            <td><strong>Priority IV</strong><br><span class="priority-desc">Cosmetic or non-blocking</span></td>
+                            <td class="total-checks">3</td>
+                            <td class="avt-data">2</td>
+                            <td class="revit-data">2</td>
+                            <td class="avt-data coverage-high">66.66%</td>
+                            <td class="revit-data coverage-high">66.66%</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td><strong>TOTAL</strong></td>
+                            <td class="total-checks"><strong>71</strong></td>
+                            <td class="avt-data"><strong>49</strong></td>
+                            <td class="revit-data"><strong>62</strong></td>
+                            <td class="avt-data coverage-low"><strong>69.01%</strong></td>
+                            <td class="revit-data coverage-high"><strong>87.32%</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Critical Gap Analysis -->
+            <!-- <div class="gap-analysis">
+                <h3>Critical Coverage Gap Analysis</h3>
+                <div class="gap-cards">
+                    <div class="gap-card critical">
+                        <h4>🚨 Critical Finding</h4>
+                        <p>AVT only covers <strong>57.14%</strong> of Priority I checks that directly impact client deliverables</p>
+                        <p class="gap-impact">This means <strong>3 out of 7 critical validations</strong> would require manual checking</p>
+                    </div>
+                    <div class="gap-card warning">
+                        <h4>⚠️ Coordination Risk</h4>
+                        <p>AVT covers only <strong>41.67%</strong> of Priority II coordination checks</p>
+                        <p class="gap-impact">Missing <strong>14 out of 24 coordination validations</strong> could lead to clashes</p>
+                    </div>
+                    <div class="gap-card info">
+                        <h4>ℹ️ Overall Assessment</h4>
+                        <p>Revit API provides <strong>94.44%</strong> coverage vs AVT's <strong>59.72%</strong></p>
+                        <p class="gap-impact">Revit API missing only <strong>4 checks</strong> vs AVT missing <strong>29 checks</strong></p>
+                    </div>
+                </div>
+            </div> -->
+        </section>
+        <section class="visual-comparisons">
+            <h2>COVERAGE VISUALIZATION</h2>
+ 
+            <!-- Overall Coverage Comparison -->
+            <div class="chart-container">
+                <h3>Overall Validation Coverage</h3>
+                <div class="coverage-donut-container">
+                    <div class="donut-chart-wrapper">
+                        <h4>AVT Coverage</h4>
+                        <svg viewBox="0 0 200 200" class="donut-chart">
+                            <circle cx="100" cy="100" r="80" fill="none" stroke="#e0e0e0" stroke-width="20"/>
+                            <circle cx="100" cy="100" r="80" fill="none" stroke="#3498db" stroke-width="20"
+                                    stroke-dasharray="298.59 502.65" stroke-dashoffset="1.66"
+                                    transform="rotate(-90 100 100)"/>
+                            <text x="100" y="100" text-anchor="middle" dy="8" class="donut-text">69.01%</text>
+                        </svg>
+                        <p class="coverage-detail">49 of 71 checks</p>
+                    </div>
+ 
+                    <div class="donut-chart-wrapper">
+                        <h4>Revit API Coverage</h4>
+                        <svg viewBox="0 0 200 200" class="donut-chart">
+                            <circle cx="100" cy="100" r="80" fill="none" stroke="#e0e0e0" stroke-width="20"/>
+                            <circle cx="100" cy="100" r="80" fill="none" stroke="#e74c3c" stroke-width="20"
+                                    stroke-dasharray="474.73 502.65" stroke-dashoffset="13.66"
+                                    transform="rotate(-90 100 100)"/>
+                            <text x="100" y="100" text-anchor="middle" dy="8" class="donut-text">87.32%</text>
+                        </svg>
+                        <p class="coverage-detail">62 of 71 checks</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+       <!-- Project Scale Comparison with Updated Coverage -->
+        <section class="project-scale-analysis">
+            <h2>PROJECT SCALE IMPACT ANALYSIS</h2>
+ 
+ 
+            <!-- Building Projects -->
+            <div class="project-type-section">
+                <h3>💡 Token Pricing Model</h3>
+ 
+                <!-- Small Scale Building -->
+                <div class="scale-comparison">
+                <p><strong>Example cost per token:</strong> $1 USD | <strong>1 model validation = 1 token</strong></p>
+                    <div class="project-comparison-grid">
+                        <div class="project-card avt-project">
+                            <h5></h5>
+                            <div class="project-metrics">
+                                <div class="metric">
+                                    <span class="label"></span>
+                                    <span class="label"><strong>AVT</strong><br>Small Scale (< $10M<br>, 6-12 months)</span>
+                                    <span class="label"><strong>AVT</strong><br>Large Scale ($50M-<br>$200M, 24-36 months)</span>
+                                    <span class="label"><strong>Revit API</strong><br>Large Scale ($50M-<br>$200M, 24-36 months)</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="label">Coverage:</span>
+                                    <span class="value negative">69.01%</span>
+                                    <span class="value negative">69.01%</span>
+                                    <span class="value positive">87.32%</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="label">Manual Checks Required:</span>
+                                    <span class="value negative">22 of 72</span>
+                                    <span class="value negative">22 of 72</span>
+                                    <span class="value positive">9 of 71</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="label">Validations/year:</span>
+                                    <span class="value">52</span>
+                                    <span class="value">520</span>
+                                    <span class="value">520</span>
+                                </div>
+                                <div class="metric highlight">
+                                    <span class="label">Token Cost/year:</span>
+                                    <span class="value">52 × $1 = $52</span>
+                                    <span class="value">520 × $1 = $520</span>
+                                    <span class="value positive">520 × $0 = $0</span>
+                                </div>
+                                <div class="metric highlight">
+                                    <span class="label">Maintenance/year:</span>
+                                    <span class="value">$0</span>
+                                    <span class="value">$0</span>
+                                    <span class="value negative">$1000</span>
+                                </div>
+                                <div class="metric highlight">
+                                    <span class="label">Initial Investment:</span>
+                                    <span class="value">$0</span>
+                                    <span class="value">$0</span>
+                                    <span class="value negative">$9000</span>
+                                </div>
+                                <!-- <div class="metric">
+                                    <span class="label">Base License:</span>
+                                    <span class="value">$12,300</span>
+                                </div> -->
+                                <div class="metric total">
+                                    <span class="label">Total Annual Cost:</span>
+                                    <span class="value negative">$52</span>
+                                    <span class="value negative">$520</span>
+                                    <span class="value negative">$9000</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="cost-comparison-summary">
+                        <strong>Result:</strong> Revit API is <span class="highlight-positive">5.5x cheaper</span>
+                    </div> -->
+                </div>
+            </div>
+        </section>
+        <!-- Financial Analysis Section - Updated -->
+        <section class="financial-analysis">
+            <h2>FINANCIAL ANALYSIS & COST PROJECTIONS</h2>
+           
+            <!-- User Input Section -->
+            <div class="analysis-inputs">
+                <h3>📊 Analysis Parameters</h3>
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label for="checksPerProject">Checks per Project:</label>
+                        <input type="range" id="checksPerProject" min="200" max="1000" value="720" step="10" oninput="updateAnalysis()">
+                        <span id="checksValue">520</span>
+                    </div>
+                    <div class="input-group">
+                        <label for="projectsPerYear">Projects per Year:</label>
+                        <input type="range" id="projectsPerYear" min="1" max="20" value="7" oninput="updateAnalysis()">
+                        <span id="projectsValue">3</span>
+                    </div>
+                    <div class="input-group">
+                        <label for="analysisYears">Analysis Period (years):</label>
+                        <input type="range" id="analysisYears" min="1" max="10" value="3" oninput="updateAnalysis()">
+                        <span id="yearsValue">5</span>
+                    </div>
+                    <!-- Hidden token price -->
+                    <input type="hidden" id="tokenPrice" value="1">
+                </div>
+            </div>
+ 
+            <!-- Cost Over Time Chart -->
+            <div class="chart-section">
+                <h3>📈 Cumulative Cost Over Time</h3>
+                <div class="chart-container">
+                    <canvas id="costOverTimeChart"></canvas>
+                </div>        
+            </div>
+ 
+            <!-- Decision Matrix -->
+            <div class="decision-guide">
+                <h3>🎯 Decision Guide</h3>
+                <div class="decision-grid">
+                    <div class="scenario-card avt-scenario">
+                        <h4>Choose AVT if:</h4>
+                        <ul>
+                            <li>Only 1-5 projects per year</li>
+                            <li>No initial investment required</li>
+                            <li>Short-term solution needed</li>
+                            <li>69.01% coverage is acceptable</li>
+                        </ul>
+                    </div>
+                    <div class="scenario-card revit-scenario">
+                        <h4>Choose Revit API if:</h4>
+                        <ul>
+                            <li>6+ projects per year</li>
+                            <li>Initial investment required</li>
+                            <li>Required updates</li>
+                            <li>87.32% coverage is acceptable</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+ 
+        <!-- Chart.js Library -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ 
+        <script>
+        let costOverTimeChart = null;
+ 
+        function updateAnalysis() {
+            // Update display values
+            document.getElementById('checksValue').textContent = document.getElementById('checksPerProject').value;
+            document.getElementById('projectsValue').textContent = document.getElementById('projectsPerYear').value;
+            document.getElementById('yearsValue').textContent = document.getElementById('analysisYears').value;
+           
+            const checksPerProject = parseInt(document.getElementById('checksPerProject').value);
+            const projectsPerYear = parseInt(document.getElementById('projectsPerYear').value);
+            const years = parseInt(document.getElementById('analysisYears').value);
+            const tokenPrice = 1; // Fixed token price
+           
+            // Constants
+            const revitInitialCost = 9000;
+            const revitAnnualCost = 1000;
+            const avtCostPerValidation = tokenPrice;
+           
+            // Calculate annual costs
+            const avtAnnualCost = projectsPerYear * checksPerProject * avtCostPerValidation;
+           
+            // Update cost over time chart
+            updateCostOverTimeChart(avtAnnualCost, revitInitialCost, revitAnnualCost, years);
+        }
+ 
+        function updateCostOverTimeChart(avtAnnual, revitInitial, revitAnnual, years) {
+            const ctx = document.getElementById('costOverTimeChart').getContext('2d');
+           
+            // Generate data
+            const labels = [];
+            const avtData = [];
+            const revitData = [];
+           
+            for (let year = 0; year <= years; year++) {
+                labels.push(`Year ${year}`);
+                avtData.push(avtAnnual * year);
+                revitData.push(year === 0 ? revitInitial : revitInitial + (revitAnnual * year));
+            }
+           
+            if (costOverTimeChart) {
+                costOverTimeChart.destroy();
+            }
+           
+            costOverTimeChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'AVT Cumulative Cost',
+                        data: avtData,
+                        borderColor: '#3498db',
+                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.1
+                    }, {
+                        label: 'Revit API Cumulative Cost',
+                        data: revitData,
+                        borderColor: '#e74c3c',
+                        backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': $' + context.parsed.y.toLocaleString();
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+ 
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', updateAnalysis);
+        </script>
+        <!-- Updated Decision Matrix -->
+        <section class="decision-matrix">
+            <h2>WEIGHTED DECISION MATRIX - WITH ACTUAL COVERAGE DATA</h2>
+            <table class="matrix-table">
+                <thead>
+                    <tr>
+                        <th>Criterion</th>
+                        <th>Weight</th>
+                        <th colspan="2">AVT</th>
+                        <th colspan="2">Revit API</th>
+                        <th>Winner</th>
+                    </tr>
+                    <tr class="sub-header">
+                        <th></th>
+                        <th></th>
+                        <th>Score</th>
+                        <th>Weighted</th>
+                        <th>Score</th>
+                        <th>Weighted</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Functional Coverage</td>
+                        <td>30%</td>
+                        <td>7.47</td>
+                        <td>224</td>
+                        <td>9.44</td>
+                        <td>283</td>
+                        <td class="winner">Revit API</td>
+                    </tr>
+                    <tr>
+                        <td>Priority I Coverage</td>
+                        <td>20%</td>
+                        <td>5.71</td>
+                        <td>114</td>
+                        <td>8.57</td>
+                        <td>171</td>
+                        <td class="winner">Revit API</td>
+                    </tr>
+                    <tr>
+                        <td>Human Time</td>
+                        <td>15%</td>
+                        <td>8</td>
+                        <td>120</td>
+                        <td>6</td>
+                        <td>90</td>
+                        <td class="winner">AVT</td>
+                    </tr>
+                    <tr>
+                        <td>Total Cost (5 years)</td>
+                        <td>10%</td>
+                        <td>3</td>
+                        <td>30</td>
+                        <td>7</td>
+                        <td>70</td>
+                        <td class="winner">Revit API</td>
+                    </tr>
+                    <tr>
+                        <td>Implementation Speed</td>
+                        <td>10%</td>
+                        <td>10</td>
+                        <td>100</td>
+                        <td>4</td>
+                        <td>40</td>
+                        <td class="winner">AVT</td>
+                    </tr>
+                    <tr>
+                        <td>Ease of Configuration</td>
+                        <td>5%</td>
+                        <td>9</td>
+                        <td>45</td>
+                        <td>3</td>
+                        <td>15</td>
+                        <td class="winner">AVT</td>
+                    </tr>
+                    <tr>
+                        <td>Scalability</td>
+                        <td>5%</td>
+                        <td>5</td>
+                        <td>25</td>
+                        <td>8</td>
+                        <td>40</td>
+                        <td class="winner">Revit API</td>
+                    </tr>
+                   
+                    <tr>
+                        <td>Vendor Independence</td>
+                        <td>5%</td>
+                        <td>7</td>
+                        <td>35</td>
+                        <td>3</td>
+                        <td>15</td>
+                        <td class="winner">AVT</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td><strong>TOTAL</strong></td>
+                        <td><strong>100%</strong></td>
+                        <td><strong>-</strong></td>
+                        <td><strong>693</strong></td>
+                        <td><strong>-</strong></td>
+                        <td><strong>724</strong></td>
+                        <td class="winner"><strong>Revit API</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        <section class="final-recommendation">
+    <h2>FINAL RECOMMENDATION</h2>
+    <div class="recommendation-box">
+        <div class="winner-declaration">
+            <h3>Revit API Internal Tool is the Winner</h3>
+            <div class="winner-score">Score: 724 vs 693</div>
+        </div>
+ 
+        <div class="recommendation-details">
+            <div class="key-findings">
+                <h4>Key Findings Based on Actual Coverage Data:</h4>
+                <ul>
+                    <li><strong>Coverage Gap:</strong> AVT misses 30.98% of validations (22 checks)</li>
+                    <li><strong>Critical Risk:</strong> AVT covers only 57.14% of Priority I checks</li>
+                    <li><strong>Coordination Risk:</strong> AVT covers only 73.68% of Priority II checks</li>
+                    <li><strong>Cost Analysis:</strong> Revit API is more cost-effective for 6+ projects/year</li>
+                    <li><strong>Manual Work:</strong> AVT requires manual validation for 22 checks vs 9 for Revit API</li>
+                </ul>
+            </div>
+ 
+                    <!-- <div class="coverage-summary">
+                        <h4>Coverage Summary by Priority:</h4>
+                        <table class="summary-table">
+                            <tr>
+                                <th>Priority</th>
+                                <th>AVT Gap</th>
+                                <th>Revit API Gap</th>
+                            </tr>
+                            <tr>
+                                <td>I - Critical</td>
+                                <td class="negative">-42.86%</td>
+                                <td class="neutral">-14.29%</td>
+                            </tr>
+                            <tr>
+                                <td>II - High</td>
+                                <td class="negative">-58.33%</td>
+                                <td class="positive">0%</td>
+                            </tr>
+                            <tr>
+                                <td>III - Medium</td>
+                                <td class="neutral">-26.32%</td>
+                                <td class="positive">-7.89%</td>
+                            </tr>
+                            <tr>
+                                <td>IV - Low</td>
+                                <td class="negative">-66.67%</td>
+                                <td class="positive">0%</td>
+                            </tr>
+                        </table>
+                    </div> -->
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

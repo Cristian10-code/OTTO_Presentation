@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTTO - Portafolio Aplicaciones</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="intro-screen" id="introScreen">
+        <video id="introVideo" autoplay muted playsinline disablePictureInPicture>
+            <source src="Video OTTO.mp4" type="video/mp4">
+            Your browser does not support the video element.
+        </video>
+        <div class="intro-content">
+            <button class="intro-button hidden" id="startBtn" onclick="startPresentation()">
+                <span>Comenzar Presentación</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+    
+
+    
+    <!-- Main content (hidden initially) -->
+    <div class="main-content" id="mainContent" style="display: none;">
+        <!-- Home button -->
+        <button class="home-button" onclick="goToIntro()" title="Back to Start">
+            <i class="fas fa-home"></i>
+        </button>
+
+        <!-- Sidebar with timeline -->
+        <div class="timeline-sidebar">
+            <div class="timeline-header">
+                <img src="Logos/05. IMAGOTIPO BLANCO AREA RESERVA.png" alt="EC Plus" class="ec-plus-logo">
+                <p>Portafolio de Aplicaciones</p>
+            </div>
+
+            <div class="timeline">
+                <!-- BEP Checker -->
+                <div class="timeline-item active" data-slide="bep-checker">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">Revisor BIM</div>
+                        <div class="timeline-subtitle">Cumplimiento BEP</div>
+                    </div>
+                </div>
+                <!-- Architectural Finishes -->
+                <div class="timeline-item" data-slide="arch-finishes">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">Architectural Finishes</div>
+                        <div class="timeline-subtitle">Acabados de Muros, Pisos y Cielo Rasos</div>
+                    </div>
+                </div> 
+                <!-- Voids -->
+                <div class="timeline-item" data-slide="voids">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">Voids</div>
+                        <div class="timeline-subtitle">Coordinación de Vacíos</div>
+                    </div>
+                </div>
+      
+                <!-- Database Integration -->
+                <div class="timeline-item" data-slide="excel-integration">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">Parameter Tool</div>
+                        <div class="timeline-subtitle">Llenado de Parámetros</div>
+                    </div>
+                </div>
+                <!-- Sheet Checker -->
+                <div class="timeline-item" data-slide="sheet-checker">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">XYZ Coordinates</div>
+                        <div class="timeline-subtitle">Genera coordenadas de familias</div>
+                    </div>
+                </div>
+                
+
+
+                
+                <!-- Web Platform -->
+                <div class="timeline-item" data-slide="bep-web">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2025</div>
+                        <div class="timeline-title">Web BEP Revisor</div>
+                        <div class="timeline-subtitle">Automated Web Compliance</div>
+                    </div>
+                </div>
+
+                <!-- Digital Twins -->
+                <div class="timeline-item" data-slide="digital-twins">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2025</div>
+                        <div class="timeline-title">Digital Twins</div>
+                        <div class="timeline-subtitle">IoT Integration Platform</div>
+                    </div>
+                </div>
+
+                <!-- Thank You -->
+                <div class="timeline-item" data-slide="closing">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">Thank You</div>
+                        <div class="timeline-subtitle">Contact Information</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dynamic content area -->
+        <div class="preview-area">
+            <div class="slide-content" id="slideContent">
+                <!-- Content will be loaded dynamically here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
