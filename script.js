@@ -38,7 +38,7 @@ const slideContents = {
                     <div class="laptop">
                         <div class="laptop-screen">
                             <video class="laptop-video" controls muted>
-                                <source src="ACM_EC_BEP_Revisor.mp4" type="video/mp4">
+                                <source src="OTTO_BEP_Revisor.mp4" type="video/mp4">
                                 Your browser does not support the video element.
                             </video>
                         </div>
@@ -104,7 +104,7 @@ const slideContents = {
                     <div class="laptop">
                         <div class="laptop-screen">
                             <video class="laptop-video" controls muted>
-                                <source src="ACM_EC_Voids.mp4" type="video/mp4">
+                                <source src="OTTO_FirestopVoids.mp4" type="video/mp4">
                                 Your browser does not support the video element.
                             </video>
                         </div>
