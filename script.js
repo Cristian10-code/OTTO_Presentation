@@ -38,7 +38,7 @@ const slideContents = {
                     <div class="laptop">
                         <div class="laptop-screen">
                             <video class="laptop-video" controls muted>
-                                <source src="ACM_EC_BEP_Revisor.mp4" type="video/mp4">
+                                <source src="OTTO_BEP_Revisor.mp4" type="video/mp4">
                                 Your browser does not support the video element.
                             </video>
                         </div>
@@ -46,23 +46,23 @@ const slideContents = {
                     <div class="laptop-base"></div>
                 </div>
                 <div class="content-section">
-                    <h2>BEP Revisor</h2>
-                    <h3>Automated Compliance Verification</h3>
-                    <p>Tool that automates the verification of BEP (BIM Execution Plan) requirements compliance in Revit models.</p>
+                    <h2>Revisor BIM</h2>
+                    <h3>Verificación Inteligente de Estándares BEP</h3>
+                    <p>Solución empresarial que revoluciona el control de calidad en proyectos BIM, automatizando la verificación de cumplimiento del Plan de Ejecución BIM (BEP) en modelos Revit. Elimine errores costosos y acelere sus entregas con verificación instantánea.</p>
                     <ul class="feature-list">
-                        <li>Easy BEP customization</li>
-                        <li>Detailed report generation</li>
-                        <li>Direct Revit integration</li>
-                        <li>90% reduction in review time</li>
+                        <li>🎯 Personalización flexible según sus estándares corporativos</li>
+                        <li>📊 Informes ejecutivos detallados y trazables</li>
+                        <li>⚡ Integración nativa con Revit - sin interrupciones de flujo</li>
+                        <li>💰 Reducción del 90% en tiempo de revisión - ROI inmediato</li>
                     </ul>
                     <div class="action-buttons">
-                        <button class="action-btn business-case-btn" onclick="openBusinessCase()">
-                            <i class="fas fa-chart-line"></i>
-                            <span>View Business Case</span>
+                        <button class="action-btn business-case-btn" onclick="window.open('https://ottoapis.com/producto/revisor-bim', '_blank')">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span>Precios Aplicación</span>
                         </button>
-                        <button class="action-btn workflow-btn" onclick="openWorkflow()">
-                            <i class="fas fa-project-diagram"></i>
-                            <span>View Workflow</span>
+                        <button class="action-btn business-case-btn" onclick="window.open('BEP_V1.xlsx', '_blank')">
+                            <i class="fas fa-file-excel"></i>
+                            <span>Verificadores</span>
                         </button>
                     </div>
                 </div>
@@ -76,7 +76,7 @@ const slideContents = {
                     <div class="laptop">
                         <div class="laptop-screen">
                             <video class="laptop-video" controls muted>
-                                <source src="ACM_EC_ArchFinish.mp4" type="video/mp4">
+                                <source src="OTTO_WallFinishes.mp4" type="video/mp4">
                                 Your browser does not support the video element.
                             </video>
                         </div>
@@ -85,14 +85,20 @@ const slideContents = {
                 </div>
                 <div class="content-section">
                     <h2>Architectural Finishes</h2>
-                    <h3>Smart Material Application</h3>
-                    <p>Automated system for applying and managing architectural finishes in BIM models.</p>
+                    <h3>Automatización Avanzada de Materiales</h3>
+                    <p>Sistema empresarial de última generación que transforma la aplicación y gestión de acabados arquitectónicos en modelos BIM. Optimice sus especificaciones de materiales y reduzca drásticamente el tiempo de modelado manual con tecnología de asignación inteligente.</p>
                     <ul class="feature-list">
-                        <li>Room-based automatic application</li>
-                        <li>Easy material assigment</li>
-                        <li>Avoid manual process</li>
-                        <li>Multiple filters for rooms and wall finishes</li>
+                        <li>🏢 Aplicación automática basada en espacios y zonas</li>
+                        <li>🎨 Asignación masiva de materiales con un clic</li>
+                        <li>⏱️ Elimine por completo los procesos manuales repetitivos</li>
+                        <li>🔍 Filtros avanzados para muros, pisos y cielos rasos personalizables</li>
                     </ul>
+                    <div class="action-buttons">
+                        <button class="action-btn business-case-btn" onclick="window.open('https://ottoapis.com/producto/architectural-finishes', '_blank')">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span>Precios Aplicación</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         `
@@ -104,7 +110,7 @@ const slideContents = {
                     <div class="laptop">
                         <div class="laptop-screen">
                             <video class="laptop-video" controls muted>
-                                <source src="ACM_EC_Voids.mp4" type="video/mp4">
+                                <source src="OTTO_FirestopVoids.mp4" type="video/mp4">
                                 Your browser does not support the video element.
                             </video>
                         </div>
@@ -112,15 +118,21 @@ const slideContents = {
                     <div class="laptop-base"></div>
                 </div>
                 <div class="content-section">
-                    <h2>Voids Automation</h2>
-                    <h3>Multi-Discipline Coordination</h3>
-                    <p>Automation of void creation and management process between disciplines for MEP coordination.</p>
+                    <h2>Voids</h2>
+                    <h3>Prevención Inteligente de Conflictos MEP</h3>
+                    <p>Plataforma de coordinación avanzada que automatiza la creación y gestión de vacíos estructurales entre disciplinas. Elimine costosos retrabajos en obra y conflictos de última hora con generación inteligente de penetraciones para instalaciones MEP.</p>
                     <ul class="feature-list">
-                        <li>Prevent clash conflicts</li>
-                        <li>Intelligent void generation</li>
-                        <li>Firestop automated location</li>
-                        <li>Voids for ducts, cabletray, busway and pipes on walls and floors</li>
+                        <li>🛡️ Prevención proactiva de conflictos antes de construcción</li>
+                        <li>🤖 Generación inteligente de vacíos con reconocimiento automático</li>
+                        <li>🔥 Ubicación automatizada de sellos cortafuego según normativa</li>
+                        <li>⚙️ Soporte completo: ductos, bandejas, busway y tuberías en muros y losas</li>
                     </ul>
+                    <div class="action-buttons">
+                        <button class="action-btn business-case-btn" onclick="window.open('https://ottoapis.com/producto/firestop-voids', '_blank')">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span>Precios Aplicación</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         `
@@ -132,7 +144,7 @@ const slideContents = {
                 <div class="laptop">
                     <div class="laptop-screen">
                         <video class="laptop-video" controls muted>
-                            <source src="ACM_EC_DBExcel.mp4" type="video/mp4">
+                            <source src="OTTO_ParameterTools.mp4" type="video/mp4">
                             Your browser does not support the video element.
                         </video>
                     </div>
@@ -140,28 +152,27 @@ const slideContents = {
                 <div class="laptop-base"></div>
             </div>
             <div class="content-section">
-                <h2>Dictionaries DB</h2>
-                <h3>Data Management System</h3>
-                <p>Bi-directional integration between Revit and Excel for efficient project data management.</p>
+                <h2>Parameter Tool</h2>
+                <h3>Gestión Inteligente de Parámetros BIM</h3>
+                <p>Herramienta empresarial con interfaz intuitiva que simplifica y automatiza la asignación masiva de parámetros en modelos Revit. Optimice la nomenclatura y trazabilidad de todos sus elementos constructivos con un solo clic.</p>
                 <ul class="feature-list">
-                    <li>Bulk information database import</li>
-                    <li>Compatible with system families and loadable families</li>
-                    <li>Total control over Revit families information                        
-                        <li>Modify any parameter type:
-                            <ul class="no-checks">
-                                <li>OmniClass Table 21 - Elements</li>
-                                <li>OmniClass Table 22 - Work Results</li>
-                                <li>OmniClass Table 23 - Products</li>
-                                <li>Assembly Code</li>
-                                <li>Keynote</li>
-                                <li>Material properties (kg/ml, density, etc.)</li>
-                                <li>Manufacturer data</li>                                
-                                <li>URL links and specifications</li>
-                            </ul>
-                        </li>
-                    
+                    <li>🎯 Asignación de valores únicos a familias de forma masiva</li>
+                    <li>🔄 Reemplazo y actualización de valores existentes en lote</li>
+                    <li>🔢 Generación automática de consecutivos (numéricos y alfanuméricos)</li>
+                    <li>📋 Ejemplos de aplicación:
+                        <ul class="no-checks">
+                            <li>Pilotes: PIL-001, PIL-002, PIL-003...</li>
+                            <li>Puertas: DOOR-101, DOOR-102...</li>
+                            <li>Cualquier elemento: prefijo + consecutivo personalizable</li>
+                        </ul>
                     </li>
                 </ul>
+                <div class="action-buttons">
+                    <button class="action-btn business-case-btn" onclick="window.open('https://ottoapis.com/producto/parameter-tool', '_blank')">
+                        <i class="fas fa-dollar-sign"></i>
+                        <span>Precios Aplicación</span>
+                    </button>
+                </div>
             </div>
         </div>
     `
@@ -173,7 +184,7 @@ const slideContents = {
                     <div class="laptop">
                         <div class="laptop-screen">
                             <video class="laptop-video" controls muted>
-                                <source src="Videos/ACM_EC_SheetRevisor.mp4" type="video/mp4">
+                                <source src="OTTO_XYZCoordinates.mp4" type="video/mp4">
                                 Your browser does not support the video element.
                             </video>
                         </div>
@@ -181,14 +192,20 @@ const slideContents = {
                     <div class="laptop-base"></div>
                 </div>
                 <div class="content-section">
-                    <h2>Sheet Revisor</h2>
-                    <h3>Drawing Standards Quality Assurance</h3>
-                    <p>Automated verification tool for drawing standards and technical documentation.</p>
+                    <h2>XYZ Coordinates</h2>
+                    <h3>Geolocalización Automática de Elementos BIM</h3>
+                    <p>Herramienta especializada que extrae y asigna automáticamente las coordenadas geográficas (N/S, E/W, Elevación) a todos los elementos de una categoría seleccionada. Optimice la documentación técnica y garantice la trazabilidad espacial de sus componentes constructivos.</p>
                     <ul class="feature-list">
-                        <li>CAD standards verification</li>
-                        <li>Scale Reviewer</li>
-                        <li>Siteplan Checker</li>
-                        <li>Batch processing of multiple sheets</li>
+                        <li>📍 Extracción automática de coordenadas N/S, E/W y Elevación</li>
+                        <li>📂 Selección flexible por categoría de familia</li>
+                        <li>⚡ Asignación masiva a todos los elementos de la categoría</li>
+                        <li>🏗️ Casos de uso:
+                            <ul class="no-checks">
+                                <li>Coordenadas de pilotes para replanteo en obra</li>
+                                <li>Ubicación de cajas de inspección sanitaria</li>
+                                <li>Georreferenciación de elementos estructurales</li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -201,7 +218,7 @@ const slideContents = {
                     <div class="laptop">
                         <div class="laptop-screen">
                             <video class="laptop-video" controls muted>
-                                <source src="Videos/ACM_EC_WEB_BEP_Revisor.mp4" type="video/mp4">
+                                <source src="OTTO_AplicacionesFuturas.mp4" type="video/mp4">
                                 Your browser does not support the video element.
                             </video>
                         </div>
@@ -209,15 +226,27 @@ const slideContents = {
                     <div class="laptop-base"></div>
                 </div>
                 <div class="content-section">
-                    <h2>BEP Checker Web</h2>
-                    <h3>Cloud Platform</h3>
-                    <p>Web version of BEP Checker with extended capabilities and access from anywhere.</p>
-                    <ul class="feature-list">
-                        <li>Direct connection with uploaded models</li>
-                        <li>Real-time collaboration</li>
-                        <li>Project metrics dashboard</li>
-                        <li>BIM 360/ACC integration</li>
-                    </ul>
+                    <h2>Futuras Aplicaciones</h2>
+                    <p>Proyectos actualmente en desarrollo para ampliar nuestras soluciones digitales</p>
+                    
+                    <div class="future-apps-vertical">
+                        <div class="future-app-section">
+                            <h3>🏗️ Revit - Hangers</h3>
+                            <p>Aplicación especializada para la ubicación automática de soportería en proyectos MEP.</p>
+                            <ul class="feature-list">
+                                <li>📊 Ubicación inteligente de <strong>soportes y colgantes</strong></li>
+                                <li>📝 Elevación del LOD de modelos a <strong>LOD 350</strong></li>
+                            </ul>
+                        </div>                        
+                        <div class="future-app-section">
+                            <h3>🛣️ Civil 3D</h3>
+                            <p>Herramientas de automatización para gestión de información en proyectos de infraestructura.</p>
+                            <ul class="feature-list">
+                                <li>📊 <strong>Property Data Manager:</strong> Llenado masivo de propiedades mediante Excel</li>
+                                <li>📝 <strong>Sheet Verifier:</strong> Automatización de rótulos de planos</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         `
@@ -229,7 +258,7 @@ const slideContents = {
                     <div class="laptop">
                         <div class="laptop-screen">
                             <video class="laptop-video" controls muted>
-                                <source src="ACM_EC_DigitalTwins.mp4" type="video/mp4">
+                                <source src="OTTO_GemelosDigitales.mp4" type="video/mp4">
                                 Your browser does not support the video element.
                             </video>
                         </div>
@@ -238,12 +267,13 @@ const slideContents = {
                 </div>
                 <div class="content-section">
                     <h2>Digital Twins</h2>
-                    <h3>IoT Integration Platform</h3>
-                    <p>Integration of BIM models with IoT sensors to create real-time digital twins.</p>
+                    <h3>Plataforma de Integración IoT</h3>
+                    <p>Solución innovadora que integra modelos BIM con sensores IoT para crear gemelos digitales en tiempo real. Transforme la gestión de sus activos con monitoreo inteligente y análisis predictivo para optimizar el rendimiento de sus edificaciones.</p>
                     <ul class="feature-list">
-                        <li>Real-time monitoring</li>
-                        <li>Preventive maintenance *</li>
-                        <li>Energy optimization *</li>
+                        <li>📡 Monitoreo en tiempo real de sistemas y equipos</li>
+                        <li>🔧 Mantenimiento preventivo basado en datos</li>
+                        <li>⚡ Optimización energética y reducción de costos operativos</li>
+                        <li>📊 Dashboards interactivos con visualización 3D</li>
                     </ul>
                 </div>
             </div>
@@ -253,12 +283,25 @@ const slideContents = {
         html: `
             <div class="slide-layout full-width">
                 <div class="content-section closing-content">
-                    <h2>Thank You!</h2>
-                    <p>For your attention and interest in our digital solutions</p>
+                    <h2>Gracias!</h2>
+                    <p>Por su atención e interés en nuestras soluciones digitales</p>
+                    <p><a href="https://www.ottoapis.com" target="_blank">www.ottoapis.com</a></p>
                     <div class="contact-info">
-                        <p><strong>AECOM EC Team</strong></p>
-                        <p>bayron.cuesta@aecom.com / christian.sarmiento@aecom.com</p>
-                    </div>                    
+                        <p><strong>OTTO Team</strong></p>
+                        <p>celular: 3508376096 / 3143839286</p>
+                        <p>appsotto00@gmail.com / contacto@ottoapis.com</p>
+                    </div>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/profile.php?id=61584977904094&locale=es_LA" target="_blank" title="Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="https://www.instagram.com/otto.appis/" target="_blank" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/company/otto-apis/" target="_blank" title="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         `
@@ -397,5 +440,5 @@ document.addEventListener('DOMContentLoaded', function() {
             startBtn.classList.remove('hidden');
             startBtn.classList.add('show');
         }
-    }, 5000); // 3000ms = 3 segundos
+    }, 5500); // 3000ms = 3 segundos
 });
