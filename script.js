@@ -60,6 +60,10 @@ const slideContents = {
                             <i class="fas fa-dollar-sign"></i>
                             <span>Precios Aplicación</span>
                         </button>
+                        <button class="action-btn business-case-btn" onclick="window.open('BEP_V1.xlsx', '_blank')">
+                            <i class="fas fa-file-excel"></i>
+                            <span>Verificadores</span>
+                        </button>
                     </div>
                 </div>
             </div>
