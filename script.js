@@ -37,7 +37,7 @@ const slideContents = {
                 <div class="laptop-container">
                     <div class="laptop">
                         <div class="laptop-screen">
-                            <video class="laptop-video" controls muted>
+                            <video class="laptop-video" controls>
                                 <source src="OTTO_BEP_Revisor.mp4" type="video/mp4">
                                 Your browser does not support the video element.
                             </video>
@@ -75,7 +75,7 @@ const slideContents = {
                 <div class="laptop-container">
                     <div class="laptop">
                         <div class="laptop-screen">
-                            <video class="laptop-video" controls muted>
+                            <video class="laptop-video" controls>
                                 <source src="OTTO_WallFinishes.mp4" type="video/mp4">
                                 Your browser does not support the video element.
                             </video>
@@ -109,7 +109,7 @@ const slideContents = {
                 <div class="laptop-container">
                     <div class="laptop">
                         <div class="laptop-screen">
-                            <video class="laptop-video" controls muted>
+                            <video class="laptop-video" controls>
                                 <source src="OTTO_FirestopVoids.mp4" type="video/mp4">
                                 Your browser does not support the video element.
                             </video>
@@ -143,7 +143,7 @@ const slideContents = {
             <div class="laptop-container">
                 <div class="laptop">
                     <div class="laptop-screen">
-                        <video class="laptop-video" controls muted>
+                        <video class="laptop-video" controls>
                             <source src="OTTO_ParameterTools.mp4" type="video/mp4">
                             Your browser does not support the video element.
                         </video>
@@ -176,14 +176,14 @@ const slideContents = {
             </div>
         </div>
     `
-},
+    },
     'sheet-checker': {
         html: `
             <div class="slide-layout">
                 <div class="laptop-container">
                     <div class="laptop">
                         <div class="laptop-screen">
-                            <video class="laptop-video" controls muted>
+                            <video class="laptop-video" controls>
                                 <source src="OTTO_XYZCoordinates.mp4" type="video/mp4">
                                 Your browser does not support the video element.
                             </video>
@@ -211,13 +211,81 @@ const slideContents = {
             </div>
         `
     },
+    'bep-revisor-civil': {
+        html: `
+            <div class="slide-layout">
+                <div class="laptop-container">
+                    <div class="laptop">
+                        <div class="laptop-screen">
+                            <video class="laptop-video" controls>
+                                <source src="OTTO_BEPRevisorCivil3D.mp4" type="video/mp4">
+                                Your browser does not support the video element.
+                            </video>
+                        </div>
+                    </div>
+                    <div class="laptop-base"></div>
+                </div>
+                <div class="content-section">
+                    <h2>BEP Revisor Civil 3D</h2>
+                    <h3>Verificación Inteligente de Estándares BEP</h3>
+                    <p>Solución empresarial que revoluciona el control de calidad en proyectos BIM, automatizando la verificación de cumplimiento del Plan de Ejecución BIM (BEP) en modelos de Civil 3D. Elimine errores costosos y acelere sus entregas con verificación instantánea.</p>
+                    <ul class="feature-list">
+                        <li>🎯 Personalización flexible según sus estándares corporativos</li>
+                        <li>📊 Informes ejecutivos detallados y trazables</li>
+                        <li>⚡ Integración nativa con Civil 3D - sin interrupciones de flujo</li>
+                        <li>💰 Reducción del 90% en tiempo de revisión - ROI inmediato</li>
+                    </ul>
+                    <div class="action-buttons">
+                        <button class="action-btn business-case-btn" onclick="window.open('https://ottoapis.com/producto/bep-revisor-civil', '_blank')">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span>Precios Aplicación</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `
+    },
+    'databasesync': {
+        html: `
+            <div class="slide-layout">
+                <div class="laptop-container">
+                    <div class="laptop">
+                        <div class="laptop-screen">
+                            <video class="laptop-video" controls>
+                                <source src="OTTO_DataBaseSync.mp4" type="video/mp4">
+                                Your browser does not support the video element.
+                            </video>
+                        </div>
+                    </div>
+                    <div class="laptop-base"></div>
+                </div>
+                <div class="content-section">
+                    <h2>DataBaseSync Civil 3D</h2>
+                    <h3>Gestión Masiva de Parámetros BIM</h3>
+                    <p>Herramienta empresarial que transforma la edición de propiedades en Civil 3D, permitiendo exportar parámetros a Excel para su modificación masiva y posterior reimportación al modelo. Elimine la tediosa edición manual elemento por elemento y acelere la parametrización de sus proyectos.</p>
+                    <ul class="feature-list">
+                        <li>🔄 Exportación masiva de parámetros a formato Excel editable</li>
+                        <li>✏️ Modificación eficiente en hojas de cálculo - sin abrir Civil 3D</li>
+                        <li>📥 Reimportación inteligente que actualiza el modelo automáticamente</li>
+                        <li>⏱️ Reducción del 95% en tiempo de parametrización - ROI inmediato</li>
+                    </ul>
+                    <div class="action-buttons">
+                        <button class="action-btn business-case-btn" onclick="window.open('https://ottoapis.com/producto/psets-sync-civil', '_blank')">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span>Precios Aplicación</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `
+    },
     'bep-web': {
         html: `
             <div class="slide-layout">
                 <div class="laptop-container">
                     <div class="laptop">
                         <div class="laptop-screen">
-                            <video class="laptop-video" controls muted>
+                            <video class="laptop-video" controls>
                                 <source src="OTTO_AplicacionesFuturas.mp4" type="video/mp4">
                                 Your browser does not support the video element.
                             </video>
@@ -257,7 +325,7 @@ const slideContents = {
                 <div class="laptop-container">
                     <div class="laptop">
                         <div class="laptop-screen">
-                            <video class="laptop-video" controls muted>
+                            <video class="laptop-video" controls>
                                 <source src="OTTO_GemelosDigitales.mp4" type="video/mp4">
                                 Your browser does not support the video element.
                             </video>
@@ -383,6 +451,9 @@ function changeSlide(slideId) {
         slideContent.style.opacity = '0';
         setTimeout(() => {
             slideContent.innerHTML = content.html;
+            // Set video volume to 60%
+            const videos = slideContent.querySelectorAll('video');
+            videos.forEach(video => video.volume = 0.45);
             slideContent.style.opacity = '1';
         }, 300);
     }
