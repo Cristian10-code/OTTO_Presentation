@@ -1,3 +1,36 @@
+// Mobile sidebar toggle
+function toggleSidebar() {
+    const sidebar = document.querySelector('.timeline-sidebar');
+    const overlay = document.querySelector('.sidebar-overlay');
+    const toggle = document.getElementById('menuToggle');
+    
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('active');
+    
+    // Change icon
+    const icon = toggle.querySelector('i');
+    if (sidebar.classList.contains('open')) {
+        icon.className = 'fas fa-times';
+    } else {
+        icon.className = 'fas fa-bars';
+    }
+}
+
+function closeSidebarIfMobile() {
+    if (window.innerWidth <= 768) {
+        const sidebar = document.querySelector('.timeline-sidebar');
+        const overlay = document.querySelector('.sidebar-overlay');
+        const toggle = document.getElementById('menuToggle');
+        
+        if (sidebar && sidebar.classList.contains('open')) {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+            const icon = toggle.querySelector('i');
+            icon.className = 'fas fa-bars';
+        }
+    }
+}
+
 // Function to go back to intro
 function goToIntro() {
     const introScreen = document.getElementById('introScreen');
@@ -474,6 +507,9 @@ document.addEventListener('DOMContentLoaded', function() {
             // Change slide content
             const slideId = this.getAttribute('data-slide');
             changeSlide(slideId);
+            
+            // Close sidebar on mobile
+            closeSidebarIfMobile();
         });
     });
     
