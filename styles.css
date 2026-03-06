@@ -964,7 +964,7 @@ body {
     }
 
     .intro-content {
-        bottom: 10%;
+        bottom: calc(15% + env(safe-area-inset-bottom, 0px));
     }
 
     .intro-button {
