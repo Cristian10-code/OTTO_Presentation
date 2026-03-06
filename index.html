@@ -26,10 +26,17 @@
     
     <!-- Main content (hidden initially) -->
     <div class="main-content" id="mainContent" style="display: none;">
+        <!-- Mobile menu toggle -->
+        <button class="menu-toggle" id="menuToggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
         <!-- Home button -->
         <button class="home-button" onclick="goToIntro()" title="Back to Start">
             <i class="fas fa-home"></i>
         </button>
+
+        <!-- Sidebar overlay for mobile -->
+        <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
         <!-- Sidebar with timeline -->
         <div class="timeline-sidebar">
