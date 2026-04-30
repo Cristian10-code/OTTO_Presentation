@@ -1047,48 +1047,49 @@ function changeSlide(slideId) {
     }
 }
 
-// Event listeners for timeline items
-document.addEventListener('DOMContentLoaded', function() {
-    const timelineItems = document.querySelectorAll('.timeline-item');
-    
-    timelineItems.forEach(item => {
-        item.addEventListener('click', function() {
-            // Remove active class from all
-            timelineItems.forEach(el => el.classList.remove('active'));
-            
-            // Add active class to clicked
-            this.classList.add('active');
-            
-            // Change slide content
-            const slideId = this.getAttribute('data-slide');
-            changeSlide(slideId);
+if (typeof document !== 'undefined') {
+    // Event listeners for timeline items
+    document.addEventListener('DOMContentLoaded', function() {
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        
+        timelineItems.forEach(item => {
+            item.addEventListener('click', function() {
+                // Remove active class from all
+                timelineItems.forEach(el => el.classList.remove('active'));
+                
+                // Add active class to clicked
+                this.classList.add('active');
+                
+                // Change slide content
+                const slideId = this.getAttribute('data-slide');
+                changeSlide(slideId);
+            });
         });
-    });
-    
-    // Keyboard navigation
-    document.addEventListener('keydown', function(e) {
-        const activeItem = document.querySelector('.timeline-item.active');
-        if (!activeItem) return;
         
-        let targetItem = null;
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            const activeItem = document.querySelector('.timeline-item.active');
+            if (!activeItem) return;
+            
+            let targetItem = null;
+            
+            if (e.key === 'ArrowDown') {
+                targetItem = activeItem.nextElementSibling;
+            } else if (e.key === 'ArrowUp') {
+                targetItem = activeItem.previousElementSibling;
+            }
+            
+            if (targetItem && targetItem.classList.contains('timeline-item')) {
+                targetItem.click();
+            }
+        });
         
-        if (e.key === 'ArrowDown') {
-            targetItem = activeItem.nextElementSibling;
-        } else if (e.key === 'ArrowUp') {
-            targetItem = activeItem.previousElementSibling;
+        // Initialize with first slide
+        const firstSlide = document.querySelector('.timeline-item[data-slide="suite-roi"]');
+        if (firstSlide) {
+            changeSlide('suite-roi');
         }
-        
-        if (targetItem && targetItem.classList.contains('timeline-item')) {
-            targetItem.click();
-        }
     });
-    
-    // Initialize with first slide
-    const firstSlide = document.querySelector('.timeline-item[data-slide="bep-checker"]');
-    if (firstSlide) {
-        changeSlide('bep-checker');
-    }
-});
 
     // Mostrar botón después de 3 segundos
     document.addEventListener('DOMContentLoaded', function() {
