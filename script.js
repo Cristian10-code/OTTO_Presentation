@@ -62,46 +62,64 @@ function goToIntro() {
     document.querySelectorAll('.timeline-item').forEach(el => el.classList.remove('active'));
 }
 
-const ROI_HOURLY_RATE = 20000;
+const ROI_MONTHLY_HOURS = 220;
+const ROI_COST_REDUCTION_RATE = 0.95;
 
-const roiState = {
+const roiCompensationState = {
+    monthlySalary: 4300000
+};
+
+const defaultRoiState = {
     projects: 1,
     models: 30,
     reviews: 5
 };
 
+const roiScenarioStates = {};
+
 const roiScenarios = [
     {
         id: 'revisor-bim',
         title: '1. Revisor BIM (Revit)',
-        saving: '99.9%',
+        saving: '95.0%',
         description: 'Automatización de la revisión del BEP en modelos multidisciplinarios.',
         metricHeader: 'Métrica de Auditoría',
         manualHeader: 'Revisión Manual',
-        autoHeader: 'Automatización OTTO',
+        autoHeader: 'Reducción de costos',
         modelLabel: 'Cantidad de modelos por proyecto',
         frequencyLabel: 'Cantidad de revisiones por modelo',
         timeLabel: 'Horas dedicadas por revisión',
         costModelLabel: 'Costo revisión / modelo',
         costProjectLabel: 'Costo revisión / proyecto',
         manualHours: 4,
-        autoHours: 0.00007
+        autoHours: 5 / 60,
+        manualHoursControl: {
+            label: 'Horas dedicadas por revisión',
+            min: 0,
+            max: 8,
+            step: 0.5
+        }
     },
     {
         id: 'firestop-voids',
         title: '2. Firestop Voids (Revit)',
-        saving: '99.3%',
-        description: 'Generación automática de vacíos para sellos cortafuegos en muros, pisos y vigas vinculados a MEP.',
+        saving: '40.0%',
+        description: 'Generación automática de vacíos para sellos cortafuegos en muros, pisos y vigas vinculados a MEP, incluyendo el impacto del ruido de coordinación por clashes contra muros sin valor.',
         metricHeader: 'Métrica de Coordinación MEP',
         manualHeader: 'Proceso Manual',
-        autoHeader: 'Automatización OTTO',
+        autoHeader: 'Reducción de costos',
         modelLabel: 'Cantidad de modelos por proyecto',
         frequencyLabel: 'Cantidad de revisiones por modelo',
         timeLabel: 'Horas dedicadas por revisión',
         costModelLabel: 'Costo revisión / modelo',
         costProjectLabel: 'Costo revisión / proyecto',
         manualHours: 8,
-        autoHours: 0.005
+        autoHours: 0.005,
+        coordinationNoise: {
+            manualClashes: 798,
+            autoClashes: 491,
+            minutesPerClash: 1
+        }
     },
     {
         id: 'parameter-tool',
@@ -110,7 +128,7 @@ const roiScenarios = [
         description: 'Llenado masivo de parámetros, reemplazo de valores y generación de consecutivos alfanuméricos.',
         metricHeader: 'Métrica de Gestión de Datos',
         manualHeader: 'Edición Manual',
-        autoHeader: 'Automatización OTTO',
+        autoHeader: 'Reducción de costos',
         modelLabel: 'Cantidad de modelos por proyecto',
         frequencyLabel: 'Ciclos de actualización de datos',
         timeLabel: 'Horas dedicadas por ciclo',
@@ -126,7 +144,7 @@ const roiScenarios = [
         description: 'Asignación automática de coordenadas georreferenciadas a categorías y elementos seleccionados.',
         metricHeader: 'Métrica de Replanteo',
         manualHeader: 'Proceso Manual',
-        autoHeader: 'Automatización OTTO',
+        autoHeader: 'Reducción de costos',
         modelLabel: 'Cantidad de modelos por proyecto',
         frequencyLabel: 'Cantidad de revisiones por modelo',
         timeLabel: 'Horas dedicadas por revisión',
@@ -142,7 +160,7 @@ const roiScenarios = [
         description: 'Auditoría automática del cumplimiento del BEP en modelos de infraestructura de Civil 3D.',
         metricHeader: 'Métrica de Infraestructura',
         manualHeader: 'Revisión Manual',
-        autoHeader: 'Automatización OTTO',
+        autoHeader: 'Reducción de costos',
         modelLabel: 'Cantidad de modelos (DWG)',
         frequencyLabel: 'Cantidad de revisiones por DWG',
         timeLabel: 'Horas dedicadas por revisión',
@@ -158,7 +176,7 @@ const roiScenarios = [
         description: 'Sincronización bidireccional entre Civil 3D y Excel para edición masiva de propiedades.',
         metricHeader: 'Métrica de Sincronización',
         manualHeader: 'Proceso Manual',
-        autoHeader: 'Automatización OTTO',
+        autoHeader: 'Reducción de costos',
         modelLabel: 'Cantidad de modelos (DWG)',
         frequencyLabel: 'Ciclos de sincronización',
         timeLabel: 'Horas dedicadas por ciclo',
@@ -197,14 +215,124 @@ function formatReviewHours(value) {
     return value.toFixed(5).replace(/0+$/, '').replace(/\.$/, '');
 }
 
+function getCostReductionValue(cost) {
+    return cost * ROI_COST_REDUCTION_RATE;
+}
+
+function getResidualCostValue(cost) {
+    return cost - getCostReductionValue(cost);
+}
+
+function formatCostReductionDisplay(cost) {
+    return `<span class="roi-cost-reduction-negative">-${formatCop(getCostReductionValue(cost))}</span> <span class="roi-cost-reduction-residual">(${formatCop(getResidualCostValue(cost))})</span>`;
+}
+
+function getRoiHourlyRate() {
+    return roiCompensationState.monthlySalary / ROI_MONTHLY_HOURS;
+}
+
+function getScenarioState(scenarioId) {
+    if (!roiScenarioStates[scenarioId]) {
+        roiScenarioStates[scenarioId] = { ...defaultRoiState };
+    }
+
+    return roiScenarioStates[scenarioId];
+}
+
+function getScenarioManualHours(scenario, state) {
+    return typeof state.manualHours === 'number' ? state.manualHours : scenario.manualHours;
+}
+
+function buildScenarioControlMarkup(scenario, field, label, min, max, step, formatValue) {
+    const state = getScenarioState(scenario.id);
+    const rawValue = state[field];
+    const displayValue = formatValue ? formatValue(rawValue) : rawValue;
+
+    return `
+        <div class="roi-control-item">
+            <label for="${scenario.id}-${field}-slider">${label}</label>
+            <input id="${scenario.id}-${field}-slider" data-scenario-id="${scenario.id}" data-field="${field}" type="range" min="${min}" max="${max}" step="${step}" value="${state[field]}">
+            <span class="roi-control-value" id="${scenario.id}-${field}-value">${displayValue}</span>
+        </div>
+    `;
+}
+
+function getFirestopCoordinationAnalysis(scenario, state, hourlyRate) {
+    if (!scenario.coordinationNoise) {
+        return null;
+    }
+
+    const { manualClashes, autoClashes, minutesPerClash } = scenario.coordinationNoise;
+    const manualHours = getScenarioManualHours(scenario, state);
+    const coordinationHoursManual = (manualClashes * minutesPerClash) / 60;
+    const coordinationHoursAuto = (autoClashes * minutesPerClash) / 60;
+    const coordinationCostProjectManual = coordinationHoursManual * state.models * state.reviews * state.projects * hourlyRate;
+    const coordinationCostProjectAuto = coordinationHoursAuto * state.models * state.reviews * state.projects * hourlyRate;
+    const baseCostProjectManual = manualHours * hourlyRate * state.models * state.reviews * state.projects;
+    const baseCostProjectAuto = scenario.autoHours * hourlyRate * state.models * state.reviews * state.projects;
+
+    return {
+        manualClashes,
+        autoClashes,
+        minutesPerClash,
+        coordinationHoursManual,
+        coordinationHoursAuto,
+        coordinationCostProjectManual,
+        coordinationCostProjectAuto,
+        totalCostProjectManual: baseCostProjectManual + coordinationCostProjectManual,
+        totalCostProjectAuto: baseCostProjectAuto + coordinationCostProjectAuto
+    };
+}
+
+function buildFirestopRoiContent(scenario) {
+    const { manualClashes, autoClashes } = scenario.coordinationNoise;
+
+    return `
+        <div class="roi-firestop-panel">
+            <div class="roi-firestop-media">
+                <img src="imageVoids.png" alt="Comparativo de interferencias Firestop Voids" class="roi-firestop-image">
+            </div>
+            <div class="roi-firestop-insights">
+                <div class="roi-firestop-stat">
+                    <span class="roi-firestop-stat-label">Clashes detectados en Navisworks</span>
+                    <div class="roi-firestop-stat-values">
+                        <span class="roi-firestop-stat-before">Antes: ${manualClashes}</span>
+                        <span class="roi-firestop-stat-after">Después: ${autoClashes}</span>
+                    </div>
+                </div>
+                <ul class="feature-list roi-firestop-list">
+                    <li>La disminución de interferencias reduce la cantidad de reuniones de coordinación dedicadas a revisar ruido contra muros.</li>
+                    <li>Se reduce la generación de reportes repetitivos y el tiempo invertido en documentar clashes sin valor.</li>
+                    <li>Extraección de cantidades de sellos cortafuegos.</li>
+                </ul>
+            </div>
+        </div>
+    `;
+}
+
 function buildRoiScenarioTable(scenario, index) {
+    const state = getScenarioState(scenario.id);
+    const hourlyRate = getRoiHourlyRate();
+    const firestopAnalysis = getFirestopCoordinationAnalysis(scenario, state, hourlyRate);
+    const manualHours = getScenarioManualHours(scenario, state);
+    const pillLabel = scenario.id === 'firestop-voids'
+        ? `Disminución de Interferencias: ${scenario.saving}`
+        : `Ahorro de tiempo: ${scenario.saving}`;
+
     return `
         <details class="roi-expander" ${index === 0 ? 'open' : ''}>
             <summary>
                 <span>${scenario.title}</span>
-                <span class="roi-pill">Ahorro de tiempo: ${scenario.saving}</span>
+                <span class="roi-pill">${pillLabel}</span>
             </summary>
             <p class="roi-expander-desc">${scenario.description}</p>
+            ${scenario.id === 'firestop-voids' ? buildFirestopRoiContent(scenario) : `
+            <div class="roi-controls roi-expander-controls">
+                ${buildScenarioControlMarkup(scenario, 'projects', 'Cantidad de proyectos al año', 1, 20, 1)}
+                ${buildScenarioControlMarkup(scenario, 'models', scenario.modelLabel, 1, 500, 1)}
+                ${buildScenarioControlMarkup(scenario, 'reviews', 'Cantidad de revisiones/ciclos por modelo', 1, 20, 1)}
+                ${scenario.manualHoursControl ? buildScenarioControlMarkup(scenario, 'manualHours', scenario.manualHoursControl.label, scenario.manualHoursControl.min, scenario.manualHoursControl.max, scenario.manualHoursControl.step, (value) => `${formatHours(value, 1)} h`) : ''}
+            </div>
             <div class="roi-table-wrap">
                 <table class="roi-table">
                     <thead>
@@ -217,28 +345,28 @@ function buildRoiScenarioTable(scenario, index) {
                     <tbody>
                         <tr>
                             <td>Cantidad de proyectos al año</td>
-                            <td id="${scenario.id}-projects-manual">${roiState.projects}</td>
-                            <td id="${scenario.id}-projects-auto">${roiState.projects}</td>
+                            <td id="${scenario.id}-projects-manual">${state.projects}</td>
+                            <td id="${scenario.id}-projects-auto">${state.projects}</td>
                         </tr>
                         <tr>
                             <td>${scenario.modelLabel}</td>
-                            <td id="${scenario.id}-models-manual">${roiState.models}</td>
-                            <td id="${scenario.id}-models-auto">${roiState.models}</td>
+                            <td id="${scenario.id}-models-manual">${state.models}</td>
+                            <td id="${scenario.id}-models-auto">${state.models}</td>
                         </tr>
                         <tr>
                             <td>${scenario.frequencyLabel}</td>
-                            <td id="${scenario.id}-reviews-manual">${roiState.reviews}</td>
-                            <td id="${scenario.id}-reviews-auto">${roiState.reviews}</td>
+                            <td id="${scenario.id}-reviews-manual">${state.reviews}</td>
+                            <td id="${scenario.id}-reviews-auto">${state.reviews}</td>
                         </tr>
                         <tr>
                             <td>${scenario.timeLabel}</td>
-                            <td id="${scenario.id}-hours-manual">${formatReviewHours(scenario.manualHours)}</td>
+                            <td id="${scenario.id}-hours-manual">${formatReviewHours(manualHours)}</td>
                             <td id="${scenario.id}-hours-auto">${formatReviewHours(scenario.autoHours)}</td>
                         </tr>
                         <tr>
-                            <td>Salario promedio por hora</td>
-                            <td>${formatCop(ROI_HOURLY_RATE)}</td>
-                            <td>${formatCop(ROI_HOURLY_RATE)}</td>
+                            <td>Horas dedicadas por proyecto</td>
+                            <td id="${scenario.id}-hours-project-manual"></td>
+                            <td id="${scenario.id}-hours-project-auto"></td>
                         </tr>
                         <tr>
                             <td>${scenario.costModelLabel}</td>
@@ -250,9 +378,37 @@ function buildRoiScenarioTable(scenario, index) {
                             <td id="${scenario.id}-cost-project-manual"></td>
                             <td id="${scenario.id}-cost-project-auto"></td>
                         </tr>
+                        ${firestopAnalysis ? `
+                        <tr class="roi-table-accent-row">
+                            <td>Clashes contra muros sin valor / modelo</td>
+                            <td id="${scenario.id}-noise-clashes-manual">${firestopAnalysis.manualClashes}</td>
+                            <td id="${scenario.id}-noise-clashes-auto">${firestopAnalysis.autoClashes}</td>
+                        </tr>
+                        <tr>
+                            <td>Minutos promedio por clash en reuniones e informes</td>
+                            <td id="${scenario.id}-noise-minutes-manual">${formatHours(firestopAnalysis.minutesPerClash, 1)}</td>
+                            <td id="${scenario.id}-noise-minutes-auto">${formatHours(firestopAnalysis.minutesPerClash, 1)}</td>
+                        </tr>
+                        <tr>
+                            <td>Horas de coordinación no productiva / revisión</td>
+                            <td id="${scenario.id}-noise-hours-manual">${formatHours(firestopAnalysis.coordinationHoursManual, 2)}</td>
+                            <td id="${scenario.id}-noise-hours-auto">${formatHours(firestopAnalysis.coordinationHoursAuto, 2)}</td>
+                        </tr>
+                        <tr>
+                            <td>Costo ruido de coordinación / proyecto</td>
+                            <td id="${scenario.id}-noise-cost-project-manual">${formatCop(firestopAnalysis.coordinationCostProjectManual)}</td>
+                            <td id="${scenario.id}-noise-cost-project-auto">${formatCop(firestopAnalysis.coordinationCostProjectAuto)}</td>
+                        </tr>
+                        <tr class="roi-table-accent-row">
+                            <td>Costo total coordinación / proyecto</td>
+                            <td id="${scenario.id}-total-cost-project-manual">${formatCop(firestopAnalysis.totalCostProjectManual)}</td>
+                            <td id="${scenario.id}-total-cost-project-auto">${formatCop(firestopAnalysis.totalCostProjectAuto)}</td>
+                        </tr>
+                        ` : ''}
                     </tbody>
                 </table>
             </div>
+            `}
         </details>
     `;
 }
@@ -267,24 +423,16 @@ function buildSuiteRoiHtml() {
                 <h3>Suite OTTO para Revit y Civil 3D</h3>
                 <p>
                     Ajusta los parámetros de negocio para simular impacto económico por volumen de trabajo.
-                    Base de cálculo fija: salario promedio por hora de <strong>${formatCop(ROI_HOURLY_RATE)}</strong>.
+                    Base de cálculo variable: salario mensual promedio de <strong id="roi-monthly-salary-inline">${formatCop(roiCompensationState.monthlySalary)}</strong>,
+                    equivalente a <strong id="roi-hourly-rate-inline">${formatCop(getRoiHourlyRate())}</strong> por hora sobre ${ROI_MONTHLY_HOURS} h/mes.
                 </p>
 
-                <div class="roi-controls">
-                    <div class="roi-control-item">
-                        <label for="roi-projects-slider">Cantidad de proyectos al año</label>
-                        <input id="roi-projects-slider" type="range" min="1" max="20" step="1" value="${roiState.projects}">
-                        <span class="roi-control-value" id="roi-projects-value">${roiState.projects}</span>
-                    </div>
-                    <div class="roi-control-item">
-                        <label for="roi-models-slider">Cantidad de modelos por proyecto</label>
-                        <input id="roi-models-slider" type="range" min="1" max="100" step="1" value="${roiState.models}">
-                        <span class="roi-control-value" id="roi-models-value">${roiState.models}</span>
-                    </div>
-                    <div class="roi-control-item">
-                        <label for="roi-reviews-slider">Cantidad de revisiones/ciclos por modelo</label>
-                        <input id="roi-reviews-slider" type="range" min="1" max="20" step="1" value="${roiState.reviews}">
-                        <span class="roi-control-value" id="roi-reviews-value">${roiState.reviews}</span>
+                <div class="roi-controls roi-global-controls">
+                    <div class="roi-control-item roi-salary-control">
+                        <label for="roi-monthly-salary-slider">Salario mensual promedio Coordinador BIM</label>
+                        <input id="roi-monthly-salary-slider" type="range" min="2500000" max="12000000" step="100000" value="${roiCompensationState.monthlySalary}">
+                        <span class="roi-control-value" id="roi-monthly-salary-value">${formatCop(roiCompensationState.monthlySalary)}</span>
+                        <span class="roi-control-meta" id="roi-hourly-rate-value">${formatCop(getRoiHourlyRate())} por hora sobre ${ROI_MONTHLY_HOURS} h/mes</span>
                     </div>
                 </div>
 
@@ -327,37 +475,73 @@ function setTextIfExists(id, value) {
     }
 }
 
+function setHtmlIfExists(id, value) {
+    const element = document.getElementById(id);
+    if (element) {
+        element.innerHTML = value;
+    }
+}
+
 function updateRoiMetrics() {
     let totalManualHoursYear = 0;
     let totalAutoHoursYear = 0;
+    const hourlyRate = getRoiHourlyRate();
 
-    setTextIfExists('roi-projects-value', roiState.projects);
-    setTextIfExists('roi-models-value', roiState.models);
-    setTextIfExists('roi-reviews-value', roiState.reviews);
+    setTextIfExists('roi-monthly-salary-inline', formatCop(roiCompensationState.monthlySalary));
+    setTextIfExists('roi-hourly-rate-inline', formatCop(hourlyRate));
+    setTextIfExists('roi-monthly-salary-value', formatCop(roiCompensationState.monthlySalary));
+    setTextIfExists('roi-hourly-rate-value', `${formatCop(hourlyRate)} por hora sobre ${ROI_MONTHLY_HOURS} h/mes`);
 
     roiScenarios.forEach((scenario) => {
-        const costModelManual = scenario.manualHours * ROI_HOURLY_RATE;
-        const costModelAuto = scenario.autoHours * ROI_HOURLY_RATE;
-        const costProjectManual = costModelManual * roiState.models * roiState.reviews;
-        const costProjectAuto = costModelAuto * roiState.models * roiState.reviews;
+        const state = getScenarioState(scenario.id);
+        const manualHours = getScenarioManualHours(scenario, state);
+        const hoursProjectManual = manualHours * state.models * state.reviews;
+        const hoursProjectAuto = scenario.autoHours * state.models * state.reviews;
+        const costModelManual = manualHours * hourlyRate;
+        const costModelAuto = getCostReductionValue(costModelManual);
+        const costProjectManual = costModelManual * state.models * state.reviews * state.projects;
+        const costProjectAuto = getCostReductionValue(costProjectManual);
 
-        totalManualHoursYear += scenario.manualHours * roiState.models * roiState.reviews * roiState.projects;
-        totalAutoHoursYear += scenario.autoHours * roiState.models * roiState.reviews * roiState.projects;
+        totalManualHoursYear += manualHours * state.models * state.reviews * state.projects;
+        totalAutoHoursYear += scenario.autoHours * state.models * state.reviews * state.projects;
 
-        setTextIfExists(`${scenario.id}-projects-manual`, roiState.projects);
-        setTextIfExists(`${scenario.id}-projects-auto`, roiState.projects);
-        setTextIfExists(`${scenario.id}-models-manual`, roiState.models);
-        setTextIfExists(`${scenario.id}-models-auto`, roiState.models);
-        setTextIfExists(`${scenario.id}-reviews-manual`, roiState.reviews);
-        setTextIfExists(`${scenario.id}-reviews-auto`, roiState.reviews);
+        setTextIfExists(`${scenario.id}-projects-value`, state.projects);
+        setTextIfExists(`${scenario.id}-models-value`, state.models);
+        setTextIfExists(`${scenario.id}-reviews-value`, state.reviews);
+        if (scenario.manualHoursControl) {
+            setTextIfExists(`${scenario.id}-manualHours-value`, `${formatHours(manualHours, 1)} h`);
+        }
 
-        setTextIfExists(`${scenario.id}-hours-manual`, formatReviewHours(scenario.manualHours));
+        setTextIfExists(`${scenario.id}-projects-manual`, state.projects);
+        setTextIfExists(`${scenario.id}-projects-auto`, state.projects);
+        setTextIfExists(`${scenario.id}-models-manual`, state.models);
+        setTextIfExists(`${scenario.id}-models-auto`, state.models);
+        setTextIfExists(`${scenario.id}-reviews-manual`, state.reviews);
+        setTextIfExists(`${scenario.id}-reviews-auto`, state.reviews);
+
+        setTextIfExists(`${scenario.id}-hours-manual`, formatReviewHours(manualHours));
         setTextIfExists(`${scenario.id}-hours-auto`, formatReviewHours(scenario.autoHours));
+    setTextIfExists(`${scenario.id}-hours-project-manual`, `${formatHours(hoursProjectManual, 2)} h`);
+    setTextIfExists(`${scenario.id}-hours-project-auto`, `${formatHours(hoursProjectAuto, 2)} h`);
 
         setTextIfExists(`${scenario.id}-cost-model-manual`, formatCop(costModelManual));
-        setTextIfExists(`${scenario.id}-cost-model-auto`, formatCop(costModelAuto));
+        setHtmlIfExists(`${scenario.id}-cost-model-auto`, formatCostReductionDisplay(costModelManual));
         setTextIfExists(`${scenario.id}-cost-project-manual`, formatCop(costProjectManual));
-        setTextIfExists(`${scenario.id}-cost-project-auto`, formatCop(costProjectAuto));
+        setHtmlIfExists(`${scenario.id}-cost-project-auto`, formatCostReductionDisplay(costProjectManual));
+
+        const firestopAnalysis = getFirestopCoordinationAnalysis(scenario, state, hourlyRate);
+        if (firestopAnalysis) {
+            setTextIfExists(`${scenario.id}-noise-clashes-manual`, firestopAnalysis.manualClashes);
+            setTextIfExists(`${scenario.id}-noise-clashes-auto`, firestopAnalysis.autoClashes);
+            setTextIfExists(`${scenario.id}-noise-minutes-manual`, formatHours(firestopAnalysis.minutesPerClash, 1));
+            setTextIfExists(`${scenario.id}-noise-minutes-auto`, formatHours(firestopAnalysis.minutesPerClash, 1));
+            setTextIfExists(`${scenario.id}-noise-hours-manual`, formatHours(firestopAnalysis.coordinationHoursManual, 2));
+            setTextIfExists(`${scenario.id}-noise-hours-auto`, formatHours(firestopAnalysis.coordinationHoursAuto, 2));
+            setTextIfExists(`${scenario.id}-noise-cost-project-manual`, formatCop(firestopAnalysis.coordinationCostProjectManual));
+            setTextIfExists(`${scenario.id}-noise-cost-project-auto`, formatCop(firestopAnalysis.coordinationCostProjectAuto));
+            setTextIfExists(`${scenario.id}-total-cost-project-manual`, formatCop(firestopAnalysis.totalCostProjectManual));
+            setTextIfExists(`${scenario.id}-total-cost-project-auto`, formatCop(firestopAnalysis.totalCostProjectAuto));
+        }
     });
 
     const avgSaving = totalManualHoursYear > 0
@@ -370,24 +554,37 @@ function updateRoiMetrics() {
 }
 
 function bindRoiControls() {
-    const projectsSlider = document.getElementById('roi-projects-slider');
-    const modelsSlider = document.getElementById('roi-models-slider');
-    const reviewsSlider = document.getElementById('roi-reviews-slider');
+    const salarySlider = document.getElementById('roi-monthly-salary-slider');
+    const sliders = document.querySelectorAll('.roi-expander-controls input[type="range"]');
 
-    if (!projectsSlider || !modelsSlider || !reviewsSlider) {
+    if (!salarySlider && !sliders.length) {
         return;
     }
 
-    const handleInput = () => {
-        roiState.projects = Number(projectsSlider.value);
-        roiState.models = Number(modelsSlider.value);
-        roiState.reviews = Number(reviewsSlider.value);
+    if (salarySlider) {
+        salarySlider.addEventListener('input', (event) => {
+            roiCompensationState.monthlySalary = Number(event.target.value);
+            updateRoiMetrics();
+        });
+    }
+
+    const handleInput = (event) => {
+        const slider = event.target;
+        const scenarioId = slider.dataset.scenarioId;
+        const field = slider.dataset.field;
+
+        if (!scenarioId || !field) {
+            return;
+        }
+
+        const state = getScenarioState(scenarioId);
+        state[field] = Number(slider.value);
         updateRoiMetrics();
     };
 
-    projectsSlider.addEventListener('input', handleInput);
-    modelsSlider.addEventListener('input', handleInput);
-    reviewsSlider.addEventListener('input', handleInput);
+    sliders.forEach((slider) => {
+        slider.addEventListener('input', handleInput);
+    });
 
     updateRoiMetrics();
 }
@@ -690,7 +887,7 @@ const slideContents = {
                     <div class="laptop-base"></div>
                 </div>
                 <div class="content-section">
-                    <h2>Voids</h2>
+                    <h2>Firestop Voids</h2>
                     <h3>Prevención Inteligente de Conflictos MEP</h3>
                     <p>Plataforma de coordinación avanzada que automatiza la creación y gestión de vacíos estructurales entre disciplinas. Elimine costosos retrabajos en obra y conflictos de última hora con generación inteligente de penetraciones para instalaciones MEP.</p>
                     <ul class="feature-list">

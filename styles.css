@@ -678,7 +678,7 @@ body {
 
 .roi-controls {
     display: grid;
-    grid-template-columns: repeat(3, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 14px;
     margin: 20px 0 8px;
 }
@@ -708,6 +708,25 @@ body {
     font-size: 20px;
     font-weight: 700;
     color: var(--otto-blue-dark);
+}
+
+.roi-control-meta {
+    font-size: 13px;
+    color: var(--otto-gray);
+}
+
+.roi-global-controls {
+    grid-template-columns: minmax(260px, 1fr);
+    margin-bottom: 18px;
+}
+
+.roi-salary-control {
+    max-width: 520px;
+}
+
+.roi-expander-controls {
+    padding: 0 18px;
+    margin: 16px 0 10px;
 }
 
 .roi-highlight-grid {
@@ -826,6 +845,89 @@ body {
     background: #f9fbfd;
 }
 
+.roi-table-accent-row {
+    background: #eef6ff;
+    font-weight: 700;
+}
+
+.roi-firestop-panel {
+    display: grid;
+    grid-template-columns: minmax(280px, 1.1fr) minmax(260px, 1fr);
+    gap: 18px;
+    padding: 4px 18px 18px;
+    align-items: start;
+}
+
+.roi-firestop-media {
+    border: 1px solid rgba(0, 42, 82, 0.12);
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f8fbff;
+}
+
+.roi-firestop-image {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.roi-firestop-insights {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.roi-firestop-stat {
+    background: linear-gradient(135deg, #eff8f2 0%, #f8fbff 100%);
+    border: 1px solid rgba(11, 107, 58, 0.15);
+    border-radius: 12px;
+    padding: 14px;
+}
+
+.roi-firestop-stat-label {
+    display: block;
+    font-size: 13px;
+    color: var(--otto-gray);
+    margin-bottom: 8px;
+}
+
+.roi-firestop-stat-values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.roi-firestop-stat-before,
+.roi-firestop-stat-after {
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.roi-firestop-stat-before {
+    background: #fff1f0;
+    color: #b42318;
+}
+
+.roi-firestop-stat-after {
+    background: #e8f7ee;
+    color: #0b6b3a;
+}
+
+.roi-firestop-list {
+    margin: 0;
+}
+
+.roi-cost-reduction-negative {
+    color: #0b6b3a;
+    font-weight: 700;
+}
+
+.roi-cost-reduction-residual {
+    color: var(--otto-gray);
+}
+
 .roi-conclusion {
     margin-top: 22px;
     padding: 18px;
@@ -858,6 +960,10 @@ body {
     }
 
     .roi-controls {
+        grid-template-columns: 1fr;
+    }
+
+    .roi-firestop-panel {
         grid-template-columns: 1fr;
     }
 
