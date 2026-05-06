@@ -126,7 +126,7 @@ const roiScenarios = [
         title: '3. Parameter Tool (Revit)',
         saving: '99.8%',
         description: 'Llenado masivo de parámetros, reemplazo de valores y generación de consecutivos alfanuméricos.',
-        metricHeader: 'Métrica de Gestión de Datos',
+        metricHeader: 'Detalle del proceso',
         manualHeader: 'Edición Manual',
         autoHeader: 'Reducción de costos',
         modelLabel: 'Cantidad de modelos por proyecto',
@@ -355,6 +355,7 @@ function buildRoiScenarioTable(scenario, index) {
     const hourlyRate = getRoiHourlyRate();
     const firestopAnalysis = getFirestopCoordinationAnalysis(scenario, state, hourlyRate);
     const manualHours = getScenarioManualHours(scenario, state);
+    const isParameterTool = scenario.id === 'parameter-tool';
     const pillLabel = scenario.id === 'firestop-voids'
         ? `Disminución de Interferencias: ${scenario.saving}`
         : scenario.id === 'xyz-coordinates'
@@ -711,7 +712,7 @@ const slideContents = {
                         <details class="roi-expander">
                             <summary>
                                 <span>3. Parameter Tool (Revit)</span>
-                                <span class="roi-pill">Ahorro de tiempo: 99.8%</span>
+                                <span class="roi-pill">Aumento de LOI</span>
                             </summary>
                             <p class="roi-expander-desc">Llenado masivo de parámetros, reemplazo de valores y generación de consecutivos alfanuméricos.</p>
                             <div class="roi-table-wrap">
