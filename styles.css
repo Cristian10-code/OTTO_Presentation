@@ -956,7 +956,13 @@ body {
 
 .roi-conclusion .feature-list li {
     font-size: 15px;
-    padding: 7px 0;
+    padding: 7px 0 7px 34px;
+    line-height: 1.5;
+}
+
+.roi-conclusion .feature-list li:before {
+    left: 0;
+    top: 4px;
 }
 
 @media (max-width: 992px) {
