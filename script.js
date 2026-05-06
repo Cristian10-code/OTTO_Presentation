@@ -326,6 +326,31 @@ function buildFirestopRoiContent(scenario) {
     `;
 }
 
+function buildParameterToolRoiContent() {
+    return `
+        <div class="roi-firestop-panel">
+            <div class="roi-firestop-media">
+                <img src="image-parameter-value.png" alt="Flujo automatizado de Parameter Tool" class="roi-firestop-image">
+            </div>
+            <div class="roi-firestop-insights">
+                <div class="roi-firestop-stat">
+                    <span class="roi-firestop-stat-label">Potencial de automatización del flujo</span>
+                    <div class="roi-firestop-stat-values">
+                        <span class="roi-potential-chip">Asignación masiva</span>
+                        <span class="roi-potential-chip">Reemplazo en lote</span>
+                        <span class="roi-potential-chip">Consecutivos inteligentes</span>
+                    </div>
+                </div>
+                <ul class="feature-list roi-firestop-list">
+                    <li>Centraliza la carga de valores sobre múltiples familias y parámetros en una sola operación.</li>
+                    <li>Permite actualizar nomenclaturas y descripciones existentes sin recorrer manualmente el modelo.</li>
+                    <li>Estandariza secuencias numéricas y alfanuméricas para mejorar trazabilidad, QA y consistencia documental.</li>
+                </ul>
+            </div>
+        </div>
+    `;
+}
+
 function buildXyzRoiContent() {
     return `
         <div class="roi-firestop-panel roi-xyz-panel">
@@ -358,12 +383,15 @@ function buildRoiScenarioTable(scenario, index) {
     const isParameterTool = scenario.id === 'parameter-tool';
     const pillLabel = scenario.id === 'firestop-voids'
         ? `Disminución de Interferencias: ${scenario.saving}`
-        : scenario.id === 'xyz-coordinates'
+        : isParameterTool
+            ? 'Aumento de LOI'
+            : scenario.id === 'xyz-coordinates'
             ? 'Aumento de LOI'
             : scenario.id === 'database-sync'
                 ? 'Ahorro de tiempo y Aumento de LOI'
                 : `Ahorro de tiempo: ${scenario.saving}`;
     const isFirestopScenario = scenario.id === 'firestop-voids';
+    const parameterToolContent = isParameterTool ? buildParameterToolRoiContent() : '';
     const xyzInsightContent = scenario.id === 'xyz-coordinates' ? buildXyzRoiContent() : '';
 
     return `
@@ -373,7 +401,9 @@ function buildRoiScenarioTable(scenario, index) {
                 <span class="roi-pill">${pillLabel}</span>
             </summary>
             <p class="roi-expander-desc">${scenario.description}</p>
-            ${isFirestopScenario ? buildFirestopRoiContent(scenario) : `
+            ${isFirestopScenario ? buildFirestopRoiContent(scenario) : isParameterTool ? `
+            ${parameterToolContent}
+            ` : `
             ${xyzInsightContent}
             <div class="roi-controls roi-expander-controls">
                 ${buildScenarioControlMarkup(scenario, 'projects', 'Cantidad de proyectos al año', 1, 20, 1)}
@@ -715,25 +745,25 @@ const slideContents = {
                                 <span class="roi-pill">Aumento de LOI</span>
                             </summary>
                             <p class="roi-expander-desc">Llenado masivo de parámetros, reemplazo de valores y generación de consecutivos alfanuméricos.</p>
-                            <div class="roi-table-wrap">
-                                <table class="roi-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Métrica de Gestión de Datos</th>
-                                            <th>Edición Manual</th>
-                                            <th>Automatización OTTO</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr><td>Cantidad de proyectos al año</td><td>1</td><td>1</td></tr>
-                                        <tr><td>Cantidad de modelos por proyecto</td><td>30</td><td>30</td></tr>
-                                        <tr><td>Ciclos de actualización de datos</td><td>5</td><td>5</td></tr>
-                                        <tr><td>Horas dedicadas por ciclo</td><td>6</td><td>0.01</td></tr>
-                                        <tr><td>Salario promedio por hora</td><td>$20,000 COP</td><td>$20,000 COP</td></tr>
-                                        <tr><td>Costo edición / modelo</td><td>$120,000 COP</td><td>$200 COP</td></tr>
-                                        <tr><td>Costo edición / proyecto</td><td>$3,600,000 COP</td><td>$6,000 COP</td></tr>
-                                    </tbody>
-                                </table>
+                            <div class="roi-firestop-panel">
+                                <div class="roi-firestop-media">
+                                    <img src="image-parameter-value.png" alt="Flujo automatizado de Parameter Tool" class="roi-firestop-image">
+                                </div>
+                                <div class="roi-firestop-insights">
+                                    <div class="roi-firestop-stat">
+                                        <span class="roi-firestop-stat-label">Potencial de automatización del flujo</span>
+                                        <div class="roi-firestop-stat-values">
+                                            <span class="roi-potential-chip">Asignación masiva</span>
+                                            <span class="roi-potential-chip">Reemplazo en lote</span>
+                                            <span class="roi-potential-chip">Consecutivos inteligentes</span>
+                                        </div>
+                                    </div>
+                                    <ul class="feature-list roi-firestop-list">
+                                        <li>Centraliza la carga de valores sobre múltiples familias y parámetros en una sola operación.</li>
+                                        <li>Permite actualizar nomenclaturas y descripciones existentes sin recorrer manualmente el modelo.</li>
+                                        <li>Estandariza secuencias numéricas y alfanuméricas para mejorar trazabilidad, QA y consistencia documental.</li>
+                                    </ul>
+                                </div>
                             </div>
                         </details>
 
