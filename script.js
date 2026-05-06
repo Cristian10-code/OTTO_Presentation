@@ -156,7 +156,7 @@ const roiScenarios = [
     {
         id: 'bep-civil',
         title: '5. BEP Revisor Civil 3D',
-        saving: '99.9%',
+        saving: '95.0%',
         description: 'Auditoría automática del cumplimiento del BEP en modelos de infraestructura de Civil 3D.',
         metricHeader: 'Métrica de Infraestructura',
         manualHeader: 'Revisión Manual',
@@ -167,7 +167,13 @@ const roiScenarios = [
         costModelLabel: 'Costo revisión / DWG',
         costProjectLabel: 'Costo revisión / proyecto',
         manualHours: 5,
-        autoHours: 0.0005
+        autoHours: 0.0005,
+        manualHoursControl: {
+            label: 'Horas dedicadas por revisión',
+            min: 0,
+            max: 8,
+            step: 0.5
+        }
     },
     {
         id: 'database-sync',
@@ -179,11 +185,17 @@ const roiScenarios = [
         autoHeader: 'Reducción de costos',
         modelLabel: 'Cantidad de modelos (DWG)',
         frequencyLabel: 'Ciclos de sincronización',
-        timeLabel: 'Horas dedicadas por ciclo',
-        costModelLabel: 'Costo sincro / DWG',
-        costProjectLabel: 'Costo sincro / proyecto',
+        timeLabel: 'Horas dedicadas en llenado de parámetros',
+        costModelLabel: 'Costo de llenado de parámetros / DWG',
+        costProjectLabel: 'Costo de llenado de parámetros / proyecto',
         manualHours: 8,
-        autoHours: 0.02
+        autoHours: 0.02,
+        manualHoursControl: {
+            label: 'Horas dedicadas en llenado de parámetros',
+            min: 0,
+            max: 8,
+            step: 0.5
+        }
     }
 ];
 
@@ -233,7 +245,11 @@ function getRoiHourlyRate() {
 
 function getScenarioState(scenarioId) {
     if (!roiScenarioStates[scenarioId]) {
-        roiScenarioStates[scenarioId] = { ...defaultRoiState };
+        const scenario = roiScenarios.find((item) => item.id === scenarioId);
+        roiScenarioStates[scenarioId] = {
+            ...defaultRoiState,
+            ...(scenario && scenario.manualHoursControl ? { manualHours: scenario.manualHours } : {})
+        };
     }
 
     return roiScenarioStates[scenarioId];
@@ -310,6 +326,30 @@ function buildFirestopRoiContent(scenario) {
     `;
 }
 
+function buildXyzRoiContent() {
+    return `
+        <div class="roi-firestop-panel roi-xyz-panel">
+            <div class="roi-firestop-media">
+                <img src="XYZ_Coord_Gemini.png" alt="Visualización de coordenadas georreferenciadas para XYZ Coordinates" class="roi-firestop-image">
+            </div>
+            <div class="roi-firestop-insights">
+                <div class="roi-firestop-stat">
+                    <span class="roi-firestop-stat-label">Valor agregado para los modelos BIM</span>
+                    <div class="roi-firestop-stat-values">
+                        <span class="roi-firestop-stat-after">Mayor LOI</span>
+                        <span class="roi-firestop-stat-after">Mayor precisión</span>
+                    </div>
+                </div>
+                <ul class="feature-list roi-firestop-list">
+                    <li>De forma ágil, la aplicación ubica las coordenadas de elementos de diferentes categorías seleccionadas por el usuario.</li>
+                    <li>Aumenta el LOI de los modelos al incorporar información precisa de ubicación directamente sobre los elementos.</li>
+                    <li>Mejora la calidad de la información para solicitudes recurrentes de coordenadas de cajas de inspección sanitaria, cajas eléctricas, pilotes y otros activos.</li>
+                </ul>
+            </div>
+        </div>
+    `;
+}
+
 function buildRoiScenarioTable(scenario, index) {
     const state = getScenarioState(scenario.id);
     const hourlyRate = getRoiHourlyRate();
@@ -317,7 +357,13 @@ function buildRoiScenarioTable(scenario, index) {
     const manualHours = getScenarioManualHours(scenario, state);
     const pillLabel = scenario.id === 'firestop-voids'
         ? `Disminución de Interferencias: ${scenario.saving}`
-        : `Ahorro de tiempo: ${scenario.saving}`;
+        : scenario.id === 'xyz-coordinates'
+            ? 'Aumento de LOI'
+            : scenario.id === 'database-sync'
+                ? 'Ahorro de tiempo y Aumento de LOI'
+                : `Ahorro de tiempo: ${scenario.saving}`;
+    const isFirestopScenario = scenario.id === 'firestop-voids';
+    const xyzInsightContent = scenario.id === 'xyz-coordinates' ? buildXyzRoiContent() : '';
 
     return `
         <details class="roi-expander" ${index === 0 ? 'open' : ''}>
@@ -326,7 +372,8 @@ function buildRoiScenarioTable(scenario, index) {
                 <span class="roi-pill">${pillLabel}</span>
             </summary>
             <p class="roi-expander-desc">${scenario.description}</p>
-            ${scenario.id === 'firestop-voids' ? buildFirestopRoiContent(scenario) : `
+            ${isFirestopScenario ? buildFirestopRoiContent(scenario) : `
+            ${xyzInsightContent}
             <div class="roi-controls roi-expander-controls">
                 ${buildScenarioControlMarkup(scenario, 'projects', 'Cantidad de proyectos al año', 1, 20, 1)}
                 ${buildScenarioControlMarkup(scenario, 'models', scenario.modelLabel, 1, 500, 1)}
@@ -419,7 +466,7 @@ function buildSuiteRoiHtml() {
     return `
         <div class="slide-layout full-width roi-slide">
             <div class="content-section">
-                <h2>Análisis de Eficiencia Operativa y ROI</h2>
+                <h2>Análisis de Eficiencia Operativa</h2>
                 <h3>Suite OTTO para Revit y Civil 3D</h3>
                 <p>
                     Ajusta los parámetros de negocio para simular impacto económico por volumen de trabajo.
@@ -436,20 +483,6 @@ function buildSuiteRoiHtml() {
                     </div>
                 </div>
 
-                <div class="roi-highlight-grid">
-                    <div class="roi-highlight-item">
-                        <span class="roi-highlight-label">Ahorro Promedio</span>
-                        <span class="roi-highlight-value" id="roi-highlight-saving">99.5%</span>
-                    </div>
-                    <div class="roi-highlight-item">
-                        <span class="roi-highlight-label">Horas Hombre / Año (Manual)</span>
-                        <span class="roi-highlight-value" id="roi-highlight-manual-hours">0 h</span>
-                    </div>
-                    <div class="roi-highlight-item">
-                        <span class="roi-highlight-label">Horas Hombre / Año (API OTTO)</span>
-                        <span class="roi-highlight-value" id="roi-highlight-auto-hours">0 h</span>
-                    </div>
-                </div>
 
                 <div class="roi-accordion">
                     ${scenarioHtml}
@@ -458,7 +491,7 @@ function buildSuiteRoiHtml() {
                 <div class="roi-conclusion">
                     <h3>Conclusión: Valor de la Suite OTTO</h3>
                     <ul class="feature-list">
-                        <li>Ahorro económico directo: reducción de costos operativos en promedio superior al 99%.</li>
+                        <li>Ahorro económico directo: reducción de costos operativos en promedio superior al 95%.</li>
                         <li>Reducción de riesgos: disminución de RFI en obra por menor error manual de transcripción.</li>
                         <li>Calidad garantizada: cumplimiento consistente de estándares ISO 19650 y BEP del cliente.</li>
                     </ul>
