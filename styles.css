@@ -915,6 +915,16 @@ body {
     color: #0b6b3a;
 }
 
+.roi-potential-chip {
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 14px;
+    background: #e6f4ff;
+    color: var(--otto-blue-dark);
+    border: 1px solid rgba(0, 61, 122, 0.15);
+}
+
 .roi-firestop-list {
     margin: 0;
 }

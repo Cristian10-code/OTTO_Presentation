@@ -126,7 +126,7 @@ const roiScenarios = [
         title: '3. Parameter Tool (Revit)',
         saving: '99.8%',
         description: 'Llenado masivo de parámetros, reemplazo de valores y generación de consecutivos alfanuméricos.',
-        metricHeader: 'Métrica de Gestión de Datos',
+        metricHeader: 'Detalle del proceso',
         manualHeader: 'Edición Manual',
         autoHeader: 'Reducción de costos',
         modelLabel: 'Cantidad de modelos por proyecto',
@@ -310,14 +310,45 @@ function buildFirestopRoiContent(scenario) {
     `;
 }
 
+function buildParameterToolRoiContent() {
+    return `
+        <div class="roi-firestop-panel">
+            <div class="roi-firestop-media">
+                <img src="image-parameter-value.png" alt="Flujo automatizado de Parameter Tool" class="roi-firestop-image">
+            </div>
+            <div class="roi-firestop-insights">
+                <div class="roi-firestop-stat">
+                    <span class="roi-firestop-stat-label">Potencial de automatización del flujo</span>
+                    <div class="roi-firestop-stat-values">
+                        <span class="roi-potential-chip">Asignación masiva</span>
+                        <span class="roi-potential-chip">Reemplazo en lote</span>
+                        <span class="roi-potential-chip">Consecutivos inteligentes</span>
+                    </div>
+                </div>
+                <ul class="feature-list roi-firestop-list">
+                    <li>Centraliza la carga de valores sobre múltiples familias y parámetros en una sola operación.</li>
+                    <li>Permite actualizar nomenclaturas y descripciones existentes sin recorrer manualmente el modelo.</li>
+                    <li>Estandariza secuencias numéricas y alfanuméricas para mejorar trazabilidad, QA y consistencia documental.</li>
+                </ul>
+            </div>
+        </div>
+    `;
+}
+
 function buildRoiScenarioTable(scenario, index) {
     const state = getScenarioState(scenario.id);
     const hourlyRate = getRoiHourlyRate();
     const firestopAnalysis = getFirestopCoordinationAnalysis(scenario, state, hourlyRate);
     const manualHours = getScenarioManualHours(scenario, state);
+    const isParameterTool = scenario.id === 'parameter-tool';
     const pillLabel = scenario.id === 'firestop-voids'
         ? `Disminución de Interferencias: ${scenario.saving}`
-        : `Ahorro de tiempo: ${scenario.saving}`;
+        : isParameterTool
+            ? 'Aumento de LOI'
+            : `Ahorro de tiempo: ${scenario.saving}`;
+    const scenarioVisualContent = isParameterTool
+        ? buildParameterToolRoiContent()
+        : '';
 
     return `
         <details class="roi-expander" ${index === 0 ? 'open' : ''}>
@@ -326,7 +357,10 @@ function buildRoiScenarioTable(scenario, index) {
                 <span class="roi-pill">${pillLabel}</span>
             </summary>
             <p class="roi-expander-desc">${scenario.description}</p>
-            ${scenario.id === 'firestop-voids' ? buildFirestopRoiContent(scenario) : `
+            ${scenario.id === 'firestop-voids' ? buildFirestopRoiContent(scenario) : isParameterTool ? `
+            ${scenarioVisualContent}
+            ` : `
+            ${scenarioVisualContent}
             <div class="roi-controls roi-expander-controls">
                 ${buildScenarioControlMarkup(scenario, 'projects', 'Cantidad de proyectos al año', 1, 20, 1)}
                 ${buildScenarioControlMarkup(scenario, 'models', scenario.modelLabel, 1, 500, 1)}
@@ -678,7 +712,7 @@ const slideContents = {
                         <details class="roi-expander">
                             <summary>
                                 <span>3. Parameter Tool (Revit)</span>
-                                <span class="roi-pill">Ahorro de tiempo: 99.8%</span>
+                                <span class="roi-pill">Aumento de LOI</span>
                             </summary>
                             <p class="roi-expander-desc">Llenado masivo de parámetros, reemplazo de valores y generación de consecutivos alfanuméricos.</p>
                             <div class="roi-table-wrap">
