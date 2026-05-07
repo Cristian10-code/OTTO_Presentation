@@ -62,8 +62,25 @@ function goToIntro() {
     document.querySelectorAll('.timeline-item').forEach(el => el.classList.remove('active'));
 }
 
+const ROI_WEEKLY_HOURS = 44;
 const ROI_MONTHLY_HOURS = 220;
 const ROI_COST_REDUCTION_RATE = 0.95;
+const ROI_DELIVERY_UNIT_CONFIG = {
+    weeks: {
+        label: 'Semanas',
+        min: 1,
+        max: 24,
+        step: 1,
+        hours: ROI_WEEKLY_HOURS
+    },
+    months: {
+        label: 'Meses',
+        min: 1,
+        max: 12,
+        step: 1,
+        hours: ROI_MONTHLY_HOURS
+    }
+};
 
 const roiCompensationState = {
     monthlySalary: 4300000
@@ -72,7 +89,9 @@ const roiCompensationState = {
 const defaultRoiState = {
     projects: 1,
     models: 30,
-    reviews: 5
+    reviews: 5,
+    deliveryDuration: 4,
+    deliveryUnit: 'weeks'
 };
 
 const roiScenarioStates = {};
@@ -82,19 +101,25 @@ const roiScenarios = [
         id: 'revisor-bim',
         title: '1. Revisor BIM (Revit)',
         saving: '95.0%',
+        priceUrl: 'https://ottoapis.com/producto/revisor-bim',
         description: 'Automatización de la revisión del BEP en modelos multidisciplinarios.',
         metricHeader: 'Métrica de Auditoría',
         manualHeader: 'Revisión Manual',
         autoHeader: 'Reducción de costos',
         modelLabel: 'Cantidad de modelos por proyecto',
         frequencyLabel: 'Cantidad de revisiones por modelo',
-        timeLabel: 'Horas dedicadas por revisión',
+        timeLabel: 'Horas dedicadas por modelo',
         costModelLabel: 'Costo revisión / modelo',
         costProjectLabel: 'Costo revisión / proyecto',
         manualHours: 4,
         autoHours: 5 / 60,
+        hideProjectsControl: true,
+        hiddenTableFields: ['models', 'reviews', 'delivery'],
+        deliveryWeeksControl: {
+            label: 'Plazo de entrega'
+        },
         manualHoursControl: {
-            label: 'Horas dedicadas por revisión',
+            label: 'Horas dedicadas por modelo',
             min: 0,
             max: 8,
             step: 0.5
@@ -104,6 +129,7 @@ const roiScenarios = [
         id: 'firestop-voids',
         title: '2. Firestop Voids (Revit)',
         saving: '40.0%',
+        priceUrl: 'https://ottoapis.com/producto/firestop-voids',
         description: 'Generación automática de vacíos para sellos cortafuegos en muros, pisos y vigas vinculados a MEP, incluyendo el impacto del ruido de coordinación por clashes contra muros sin valor.',
         metricHeader: 'Métrica de Coordinación MEP',
         manualHeader: 'Proceso Manual',
@@ -125,6 +151,7 @@ const roiScenarios = [
         id: 'parameter-tool',
         title: '3. Parameter Tool (Revit)',
         saving: '99.8%',
+        priceUrl: 'https://ottoapis.com/producto/parameter-tool',
         description: 'Llenado masivo de parámetros, reemplazo de valores y generación de consecutivos alfanuméricos.',
         metricHeader: 'Detalle del proceso',
         manualHeader: 'Edición Manual',
@@ -151,25 +178,33 @@ const roiScenarios = [
         costModelLabel: 'Costo proceso / modelo',
         costProjectLabel: 'Costo proceso / proyecto',
         manualHours: 2,
-        autoHours: 0.001
+        autoHours: 0.001,
+        showRoiInputs: false,
+        showMetricsTable: false
     },
     {
         id: 'bep-civil',
         title: '5. BEP Revisor Civil 3D',
         saving: '95.0%',
+        priceUrl: 'https://ottoapis.com/producto/bep-revisor-civil',
         description: 'Auditoría automática del cumplimiento del BEP en modelos de infraestructura de Civil 3D.',
         metricHeader: 'Métrica de Infraestructura',
         manualHeader: 'Revisión Manual',
         autoHeader: 'Reducción de costos',
         modelLabel: 'Cantidad de modelos (DWG)',
         frequencyLabel: 'Cantidad de revisiones por DWG',
-        timeLabel: 'Horas dedicadas por revisión',
+        timeLabel: 'Horas dedicadas por modelo',
         costModelLabel: 'Costo revisión / DWG',
         costProjectLabel: 'Costo revisión / proyecto',
         manualHours: 5,
         autoHours: 0.0005,
+        hideProjectsControl: true,
+        hiddenTableFields: ['models', 'reviews', 'delivery'],
+        deliveryWeeksControl: {
+            label: 'Plazo de entrega'
+        },
         manualHoursControl: {
-            label: 'Horas dedicadas por revisión',
+            label: 'Horas dedicadas por modelo',
             min: 0,
             max: 8,
             step: 0.5
@@ -179,19 +214,25 @@ const roiScenarios = [
         id: 'database-sync',
         title: '6. DataBaseSync Civil 3D',
         saving: '99.7%',
+        priceUrl: 'https://ottoapis.com/producto/psets-sync-civil',
         description: 'Sincronización bidireccional entre Civil 3D y Excel para edición masiva de propiedades.',
         metricHeader: 'Métrica de Sincronización',
         manualHeader: 'Proceso Manual',
         autoHeader: 'Reducción de costos',
         modelLabel: 'Cantidad de modelos (DWG)',
         frequencyLabel: 'Ciclos de sincronización',
-        timeLabel: 'Horas dedicadas en llenado de parámetros',
+        timeLabel: 'Horas dedicadas por modelo',
         costModelLabel: 'Costo de llenado de parámetros / DWG',
         costProjectLabel: 'Costo de llenado de parámetros / proyecto',
         manualHours: 8,
         autoHours: 0.02,
+        hideProjectsControl: true,
+        hiddenTableFields: ['models', 'reviews', 'delivery'],
+        deliveryWeeksControl: {
+            label: 'Plazo de entrega'
+        },
         manualHoursControl: {
-            label: 'Horas dedicadas en llenado de parámetros',
+            label: 'Horas dedicadas por modelo',
             min: 0,
             max: 8,
             step: 0.5
@@ -227,20 +268,69 @@ function formatReviewHours(value) {
     return value.toFixed(5).replace(/0+$/, '').replace(/\.$/, '');
 }
 
-function getCostReductionValue(cost) {
-    return cost * ROI_COST_REDUCTION_RATE;
+function formatWeeks(value) {
+    return `${value} ${value === 1 ? 'semana' : 'semanas'}`;
 }
 
-function getResidualCostValue(cost) {
-    return cost - getCostReductionValue(cost);
+function formatMonths(value) {
+    return `${value} ${value === 1 ? 'mes' : 'meses'}`;
 }
 
-function formatCostReductionDisplay(cost) {
-    return `<span class="roi-cost-reduction-negative">-${formatCop(getCostReductionValue(cost))}</span> <span class="roi-cost-reduction-residual">(${formatCop(getResidualCostValue(cost))})</span>`;
+function formatDeliveryDuration(value, unit) {
+    return unit === 'months' ? formatMonths(value) : formatWeeks(value);
+}
+
+function formatPeopleCount(value) {
+    if (value > 0 && value < 0.01) {
+        return '< 0.01';
+    }
+
+    return formatHours(value, 2);
+}
+
+function formatPercentage(value, decimals = 1) {
+    return `${new Intl.NumberFormat('es-CO', {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals
+    }).format(value)}%`;
+}
+
+function getScenarioReductionRate(scenario) {
+    const saving = Number.parseFloat(scenario?.saving);
+
+    if (Number.isNaN(saving)) {
+        return ROI_COST_REDUCTION_RATE;
+    }
+
+    return saving / 100;
+}
+
+function getCostReductionValue(cost, scenario) {
+    return cost * getScenarioReductionRate(scenario);
+}
+
+function getResidualCostValue(cost, scenario) {
+    return cost - getCostReductionValue(cost, scenario);
+}
+
+function formatManualCostDisplay(cost) {
+    return `<span class="roi-cost-manual">${formatCop(cost)}</span>`;
+}
+
+function formatCostReductionDisplay(cost, scenario) {
+    return `<span class="roi-cost-reduction-positive">${formatCop(getResidualCostValue(cost, scenario))}</span>`;
+}
+
+function buildCostLabel(label, scenario) {
+    return `${label} <span class="roi-reduction-label">(${formatPercentage(getScenarioReductionRate(scenario) * 100)} de reducción)</span>`;
 }
 
 function getRoiHourlyRate() {
     return roiCompensationState.monthlySalary / ROI_MONTHLY_HOURS;
+}
+
+function getDeliveryUnitConfig(unit) {
+    return ROI_DELIVERY_UNIT_CONFIG[unit] || ROI_DELIVERY_UNIT_CONFIG.weeks;
 }
 
 function getScenarioState(scenarioId) {
@@ -259,6 +349,40 @@ function getScenarioManualHours(scenario, state) {
     return typeof state.manualHours === 'number' ? state.manualHours : scenario.manualHours;
 }
 
+function shouldRenderScenarioField(scenario, field) {
+    return !(scenario.hiddenTableFields || []).includes(field);
+}
+
+function normalizeScenarioDeliveryState(state) {
+    const unitConfig = getDeliveryUnitConfig(state.deliveryUnit);
+
+    if (!state.deliveryUnit || !ROI_DELIVERY_UNIT_CONFIG[state.deliveryUnit]) {
+        state.deliveryUnit = 'weeks';
+    }
+
+    if (typeof state.deliveryDuration !== 'number' || Number.isNaN(state.deliveryDuration)) {
+        state.deliveryDuration = unitConfig.min;
+    }
+
+    if (state.deliveryDuration < unitConfig.min) {
+        state.deliveryDuration = unitConfig.min;
+    }
+
+    if (state.deliveryDuration > unitConfig.max) {
+        state.deliveryDuration = unitConfig.max;
+    }
+}
+
+function getPeopleRequired(hoursPerProject, deliveryDuration, deliveryUnit) {
+    const availableHours = deliveryDuration * getDeliveryUnitConfig(deliveryUnit).hours;
+
+    if (!availableHours) {
+        return 0;
+    }
+
+    return hoursPerProject / availableHours;
+}
+
 function buildScenarioControlMarkup(scenario, field, label, min, max, step, formatValue) {
     const state = getScenarioState(scenario.id);
     const rawValue = state[field];
@@ -269,6 +393,26 @@ function buildScenarioControlMarkup(scenario, field, label, min, max, step, form
             <label for="${scenario.id}-${field}-slider">${label}</label>
             <input id="${scenario.id}-${field}-slider" data-scenario-id="${scenario.id}" data-field="${field}" type="range" min="${min}" max="${max}" step="${step}" value="${state[field]}">
             <span class="roi-control-value" id="${scenario.id}-${field}-value">${displayValue}</span>
+        </div>
+    `;
+}
+
+function buildDeliveryControlMarkup(scenario, control) {
+    const state = getScenarioState(scenario.id);
+    normalizeScenarioDeliveryState(state);
+    const unitConfig = getDeliveryUnitConfig(state.deliveryUnit);
+
+    return `
+        <div class="roi-control-item roi-control-item--delivery">
+            <div class="roi-control-header">
+                <label for="${scenario.id}-deliveryDuration-slider">${control.label}</label>
+                <select id="${scenario.id}-deliveryUnit-select" class="roi-control-select" data-scenario-id="${scenario.id}" data-field="deliveryUnit">
+                    <option value="weeks" ${state.deliveryUnit === 'weeks' ? 'selected' : ''}>Semanas</option>
+                    <option value="months" ${state.deliveryUnit === 'months' ? 'selected' : ''}>Meses</option>
+                </select>
+            </div>
+            <input id="${scenario.id}-deliveryDuration-slider" data-scenario-id="${scenario.id}" data-field="deliveryDuration" type="range" min="${unitConfig.min}" max="${unitConfig.max}" step="${unitConfig.step}" value="${state.deliveryDuration}">
+            <span class="roi-control-value" id="${scenario.id}-deliveryDuration-value">${formatDeliveryDuration(state.deliveryDuration, state.deliveryUnit)}</span>
         </div>
     `;
 }
@@ -375,6 +519,21 @@ function buildXyzRoiContent() {
     `;
 }
 
+function buildScenarioPriceButtonMarkup(scenario) {
+    if (!scenario.priceUrl) {
+        return '';
+    }
+
+    return `
+        <div class="action-buttons roi-expander-actions">
+            <button class="action-btn business-case-btn" onclick="window.open('${scenario.priceUrl}', '_blank')">
+                <i class="fas fa-dollar-sign"></i>
+                <span>Precios Aplicación</span>
+            </button>
+        </div>
+    `;
+}
+
 function buildRoiScenarioTable(scenario, index) {
     const state = getScenarioState(scenario.id);
     const hourlyRate = getRoiHourlyRate();
@@ -393,24 +552,22 @@ function buildRoiScenarioTable(scenario, index) {
     const isFirestopScenario = scenario.id === 'firestop-voids';
     const parameterToolContent = isParameterTool ? buildParameterToolRoiContent() : '';
     const xyzInsightContent = scenario.id === 'xyz-coordinates' ? buildXyzRoiContent() : '';
-
-    return `
-        <details class="roi-expander" ${index === 0 ? 'open' : ''}>
-            <summary>
-                <span>${scenario.title}</span>
-                <span class="roi-pill">${pillLabel}</span>
-            </summary>
-            <p class="roi-expander-desc">${scenario.description}</p>
-            ${isFirestopScenario ? buildFirestopRoiContent(scenario) : isParameterTool ? `
+    const showRoiInputs = scenario.showRoiInputs !== false;
+    const showMetricsTable = scenario.showMetricsTable !== false;
+    const scenarioBodyContent = isFirestopScenario ? buildFirestopRoiContent(scenario) : isParameterTool ? `
             ${parameterToolContent}
             ` : `
             ${xyzInsightContent}
+            ${showRoiInputs ? `
             <div class="roi-controls roi-expander-controls">
-                ${buildScenarioControlMarkup(scenario, 'projects', 'Cantidad de proyectos al año', 1, 20, 1)}
+                ${scenario.hideProjectsControl ? '' : buildScenarioControlMarkup(scenario, 'projects', 'Cantidad de proyectos al año', 1, 20, 1)}
                 ${buildScenarioControlMarkup(scenario, 'models', scenario.modelLabel, 1, 500, 1)}
                 ${buildScenarioControlMarkup(scenario, 'reviews', 'Cantidad de revisiones/ciclos por modelo', 1, 20, 1)}
                 ${scenario.manualHoursControl ? buildScenarioControlMarkup(scenario, 'manualHours', scenario.manualHoursControl.label, scenario.manualHoursControl.min, scenario.manualHoursControl.max, scenario.manualHoursControl.step, (value) => `${formatHours(value, 1)} h`) : ''}
+                ${scenario.deliveryWeeksControl ? buildDeliveryControlMarkup(scenario, scenario.deliveryWeeksControl) : ''}
             </div>
+            ` : ''}
+            ${showMetricsTable ? `
             <div class="roi-table-wrap">
                 <table class="roi-table">
                     <thead>
@@ -421,38 +578,58 @@ function buildRoiScenarioTable(scenario, index) {
                         </tr>
                     </thead>
                     <tbody>
+                        ${scenario.hideProjectsControl ? '' : `
                         <tr>
                             <td>Cantidad de proyectos al año</td>
                             <td id="${scenario.id}-projects-manual">${state.projects}</td>
                             <td id="${scenario.id}-projects-auto">${state.projects}</td>
                         </tr>
+                        `}
+                        ${shouldRenderScenarioField(scenario, 'models') ? `
                         <tr>
                             <td>${scenario.modelLabel}</td>
                             <td id="${scenario.id}-models-manual">${state.models}</td>
                             <td id="${scenario.id}-models-auto">${state.models}</td>
                         </tr>
+                        ` : ''}
+                        ${shouldRenderScenarioField(scenario, 'reviews') ? `
                         <tr>
                             <td>${scenario.frequencyLabel}</td>
                             <td id="${scenario.id}-reviews-manual">${state.reviews}</td>
                             <td id="${scenario.id}-reviews-auto">${state.reviews}</td>
                         </tr>
+                        ` : ''}
                         <tr>
                             <td>${scenario.timeLabel}</td>
                             <td id="${scenario.id}-hours-manual">${formatReviewHours(manualHours)}</td>
                             <td id="${scenario.id}-hours-auto">${formatReviewHours(scenario.autoHours)}</td>
                         </tr>
+                        ${scenario.deliveryWeeksControl && shouldRenderScenarioField(scenario, 'delivery') ? `
+                        <tr>
+                            <td>Plazo de entrega</td>
+                            <td id="${scenario.id}-delivery-duration-manual">${formatDeliveryDuration(state.deliveryDuration, state.deliveryUnit)}</td>
+                            <td id="${scenario.id}-delivery-duration-auto">${formatDeliveryDuration(state.deliveryDuration, state.deliveryUnit)}</td>
+                        </tr>
+                        ` : ''}
                         <tr>
                             <td>Horas dedicadas por proyecto</td>
                             <td id="${scenario.id}-hours-project-manual"></td>
                             <td id="${scenario.id}-hours-project-auto"></td>
                         </tr>
+                        ${scenario.deliveryWeeksControl ? `
                         <tr>
-                            <td>${scenario.costModelLabel}</td>
+                            <td>Personas requeridas para cumplir el plazo</td>
+                            <td id="${scenario.id}-people-manual"></td>
+                            <td id="${scenario.id}-people-auto"></td>
+                        </tr>
+                        ` : ''}
+                        <tr>
+                            <td>${buildCostLabel(scenario.costModelLabel, scenario)}</td>
                             <td id="${scenario.id}-cost-model-manual"></td>
                             <td id="${scenario.id}-cost-model-auto"></td>
                         </tr>
                         <tr>
-                            <td>${scenario.costProjectLabel}</td>
+                            <td>${buildCostLabel(scenario.costProjectLabel, scenario)}</td>
                             <td id="${scenario.id}-cost-project-manual"></td>
                             <td id="${scenario.id}-cost-project-auto"></td>
                         </tr>
@@ -486,7 +663,18 @@ function buildRoiScenarioTable(scenario, index) {
                     </tbody>
                 </table>
             </div>
-            `}
+            ` : ''}
+            `;
+
+    return `
+        <details class="roi-expander" ${index === 0 ? 'open' : ''}>
+            <summary>
+                <span>${scenario.title}</span>
+                <span class="roi-pill">${pillLabel}</span>
+            </summary>
+            <p class="roi-expander-desc">${scenario.description}</p>
+            ${scenarioBodyContent}
+            ${buildScenarioPriceButtonMarkup(scenario)}
         </details>
     `;
 }
@@ -502,7 +690,7 @@ function buildSuiteRoiHtml() {
                 <p>
                     Ajusta los parámetros de negocio para simular impacto económico por volumen de trabajo.
                     Base de cálculo variable: salario mensual promedio de <strong id="roi-monthly-salary-inline">${formatCop(roiCompensationState.monthlySalary)}</strong>,
-                    equivalente a <strong id="roi-hourly-rate-inline">${formatCop(getRoiHourlyRate())}</strong> por hora sobre ${ROI_MONTHLY_HOURS} h/mes.
+                    equivalente a <strong id="roi-hourly-rate-inline">${formatCop(getRoiHourlyRate())}</strong> por hora sobre ${ROI_MONTHLY_HOURS} h/mes y ${ROI_WEEKLY_HOURS} h/semana.
                 </p>
 
                 <div class="roi-controls roi-global-controls">
@@ -510,7 +698,7 @@ function buildSuiteRoiHtml() {
                         <label for="roi-monthly-salary-slider">Salario mensual promedio Coordinador BIM</label>
                         <input id="roi-monthly-salary-slider" type="range" min="2500000" max="12000000" step="100000" value="${roiCompensationState.monthlySalary}">
                         <span class="roi-control-value" id="roi-monthly-salary-value">${formatCop(roiCompensationState.monthlySalary)}</span>
-                        <span class="roi-control-meta" id="roi-hourly-rate-value">${formatCop(getRoiHourlyRate())} por hora sobre ${ROI_MONTHLY_HOURS} h/mes</span>
+                        <span class="roi-control-meta" id="roi-hourly-rate-value">${formatCop(getRoiHourlyRate())} por hora sobre ${ROI_MONTHLY_HOURS} h/mes y ${ROI_WEEKLY_HOURS} h/semana</span>
                     </div>
                 </div>
 
@@ -554,17 +742,20 @@ function updateRoiMetrics() {
     setTextIfExists('roi-monthly-salary-inline', formatCop(roiCompensationState.monthlySalary));
     setTextIfExists('roi-hourly-rate-inline', formatCop(hourlyRate));
     setTextIfExists('roi-monthly-salary-value', formatCop(roiCompensationState.monthlySalary));
-    setTextIfExists('roi-hourly-rate-value', `${formatCop(hourlyRate)} por hora sobre ${ROI_MONTHLY_HOURS} h/mes`);
+    setTextIfExists('roi-hourly-rate-value', `${formatCop(hourlyRate)} por hora sobre ${ROI_MONTHLY_HOURS} h/mes y ${ROI_WEEKLY_HOURS} h/semana`);
 
     roiScenarios.forEach((scenario) => {
         const state = getScenarioState(scenario.id);
+        normalizeScenarioDeliveryState(state);
         const manualHours = getScenarioManualHours(scenario, state);
+        const deliveryDuration = state.deliveryDuration;
+        const deliveryUnit = state.deliveryUnit;
         const hoursProjectManual = manualHours * state.models * state.reviews;
         const hoursProjectAuto = scenario.autoHours * state.models * state.reviews;
         const costModelManual = manualHours * hourlyRate;
-        const costModelAuto = getCostReductionValue(costModelManual);
         const costProjectManual = costModelManual * state.models * state.reviews * state.projects;
-        const costProjectAuto = getCostReductionValue(costProjectManual);
+        const peopleManual = getPeopleRequired(hoursProjectManual, deliveryDuration, deliveryUnit);
+        const peopleAuto = getPeopleRequired(hoursProjectAuto, deliveryDuration, deliveryUnit);
 
         totalManualHoursYear += manualHours * state.models * state.reviews * state.projects;
         totalAutoHoursYear += scenario.autoHours * state.models * state.reviews * state.projects;
@@ -574,6 +765,24 @@ function updateRoiMetrics() {
         setTextIfExists(`${scenario.id}-reviews-value`, state.reviews);
         if (scenario.manualHoursControl) {
             setTextIfExists(`${scenario.id}-manualHours-value`, `${formatHours(manualHours, 1)} h`);
+        }
+        if (scenario.deliveryWeeksControl) {
+            const unitConfig = getDeliveryUnitConfig(deliveryUnit);
+            const deliverySlider = document.getElementById(`${scenario.id}-deliveryDuration-slider`);
+            const deliverySelect = document.getElementById(`${scenario.id}-deliveryUnit-select`);
+
+            if (deliverySlider) {
+                deliverySlider.min = String(unitConfig.min);
+                deliverySlider.max = String(unitConfig.max);
+                deliverySlider.step = String(unitConfig.step);
+                deliverySlider.value = String(deliveryDuration);
+            }
+
+            if (deliverySelect) {
+                deliverySelect.value = deliveryUnit;
+            }
+
+            setTextIfExists(`${scenario.id}-deliveryDuration-value`, formatDeliveryDuration(deliveryDuration, deliveryUnit));
         }
 
         setTextIfExists(`${scenario.id}-projects-manual`, state.projects);
@@ -585,13 +794,17 @@ function updateRoiMetrics() {
 
         setTextIfExists(`${scenario.id}-hours-manual`, formatReviewHours(manualHours));
         setTextIfExists(`${scenario.id}-hours-auto`, formatReviewHours(scenario.autoHours));
-    setTextIfExists(`${scenario.id}-hours-project-manual`, `${formatHours(hoursProjectManual, 2)} h`);
-    setTextIfExists(`${scenario.id}-hours-project-auto`, `${formatHours(hoursProjectAuto, 2)} h`);
+        setTextIfExists(`${scenario.id}-delivery-duration-manual`, formatDeliveryDuration(deliveryDuration, deliveryUnit));
+        setTextIfExists(`${scenario.id}-delivery-duration-auto`, formatDeliveryDuration(deliveryDuration, deliveryUnit));
+        setTextIfExists(`${scenario.id}-hours-project-manual`, `${formatHours(hoursProjectManual, 2)} h`);
+        setTextIfExists(`${scenario.id}-hours-project-auto`, `${formatHours(hoursProjectAuto, 2)} h`);
+        setTextIfExists(`${scenario.id}-people-manual`, formatPeopleCount(peopleManual));
+        setTextIfExists(`${scenario.id}-people-auto`, formatPeopleCount(peopleAuto));
 
-        setTextIfExists(`${scenario.id}-cost-model-manual`, formatCop(costModelManual));
-        setHtmlIfExists(`${scenario.id}-cost-model-auto`, formatCostReductionDisplay(costModelManual));
-        setTextIfExists(`${scenario.id}-cost-project-manual`, formatCop(costProjectManual));
-        setHtmlIfExists(`${scenario.id}-cost-project-auto`, formatCostReductionDisplay(costProjectManual));
+        setHtmlIfExists(`${scenario.id}-cost-model-manual`, formatManualCostDisplay(costModelManual));
+        setHtmlIfExists(`${scenario.id}-cost-model-auto`, formatCostReductionDisplay(costModelManual, scenario));
+        setHtmlIfExists(`${scenario.id}-cost-project-manual`, formatManualCostDisplay(costProjectManual));
+        setHtmlIfExists(`${scenario.id}-cost-project-auto`, formatCostReductionDisplay(costProjectManual, scenario));
 
         const firestopAnalysis = getFirestopCoordinationAnalysis(scenario, state, hourlyRate);
         if (firestopAnalysis) {
@@ -620,8 +833,9 @@ function updateRoiMetrics() {
 function bindRoiControls() {
     const salarySlider = document.getElementById('roi-monthly-salary-slider');
     const sliders = document.querySelectorAll('.roi-expander-controls input[type="range"]');
+    const selects = document.querySelectorAll('.roi-expander-controls select');
 
-    if (!salarySlider && !sliders.length) {
+    if (!salarySlider && !sliders.length && !selects.length) {
         return;
     }
 
@@ -648,6 +862,22 @@ function bindRoiControls() {
 
     sliders.forEach((slider) => {
         slider.addEventListener('input', handleInput);
+    });
+
+    selects.forEach((select) => {
+        select.addEventListener('change', (event) => {
+            const scenarioId = event.target.dataset.scenarioId;
+            const field = event.target.dataset.field;
+
+            if (!scenarioId || !field) {
+                return;
+            }
+
+            const state = getScenarioState(scenarioId);
+            state[field] = event.target.value;
+            normalizeScenarioDeliveryState(state);
+            updateRoiMetrics();
+        });
     });
 
     updateRoiMetrics();
